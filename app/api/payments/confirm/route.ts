@@ -45,21 +45,32 @@ export async function POST(request: NextRequest) {
     }
 
     const plan = PLANS[plan_id];
+    const isMock = process.env.CULQI_MOCK === 'true';
 
-    // Crear cargo en Culqi
-    const charge = await createCulqiCharge({
-      amount: plan.price_cents,
-      currency_code: 'PEN',
-      email,
-      source_id: token,
-      description: `NutriIA — Plan ${plan.name}`,
-    });
+    // ── Modo real: crear cargo en Culqi ───────────────────────
+    // ── Modo mock: saltar validación (solo desarrollo/testing) ─
+    let chargeId: string;
 
-    if (charge.object_error || !charge.id) {
-      console.error('[confirm] Cargo rechazado por Culqi:', charge);
-      const userMessage =
-        charge.user_message ?? 'Tu tarjeta fue rechazada. Verifica los datos e intenta de nuevo.';
-      return NextResponse.json({ error: userMessage }, { status: 402 });
+    if (isMock) {
+      console.log('[confirm] Modo mock activado — omitiendo cargo Culqi');
+      chargeId = `mock_${Date.now()}`;
+    } else {
+      const charge = await createCulqiCharge({
+        amount: plan.price_cents,
+        currency_code: 'PEN',
+        email,
+        source_id: token,
+        description: `NutriIA — Plan ${plan.name}`,
+      });
+
+      if (charge.object_error || !charge.id) {
+        console.error('[confirm] Cargo rechazado por Culqi:', charge);
+        const userMessage =
+          charge.user_message ?? 'Tu tarjeta fue rechazada. Verifica los datos e intenta de nuevo.';
+        return NextResponse.json({ error: userMessage }, { status: 402 });
+      }
+
+      chargeId = charge.id;
     }
 
     const now = new Date();
@@ -78,7 +89,7 @@ export async function POST(request: NextRequest) {
         user_id: user.id,
         plan_id,
         status: 'active',
-        culqi_charge_id: charge.id,
+        culqi_charge_id: chargeId,
         amount_cents: plan.price_cents,
         currency: 'PEN',
         current_period_start: now,
@@ -94,7 +105,7 @@ export async function POST(request: NextRequest) {
         fullName: user.user_metadata?.full_name ?? email,
         planName: plan.name,
         amountSoles: plan.price_soles,
-        chargeId: charge.id,
+        chargeId,
       });
     } catch (emailError) {
       console.error('[confirm] Error al enviar email de confirmación:', emailError);
@@ -103,7 +114,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       subscription_id: subscription.id,
-      charge_id: charge.id,
+      charge_id: chargeId,
     });
   } catch (error) {
     console.error('[confirm] Error inesperado:', error);
