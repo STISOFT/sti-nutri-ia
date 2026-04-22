@@ -1,8 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { LeafIcon, MenuIcon } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { LeafIcon, MenuIcon, LayoutDashboardIcon, LogOutIcon } from 'lucide-react';
+import { createBrowserClient } from '@supabase/ssr';
+import { toast } from 'sonner';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import {
@@ -22,7 +25,39 @@ const NAV_LINKS = [
 ];
 
 export function Navbar() {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const supabase = createBrowserClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
+
+    // Verificar sesión actual
+    supabase.auth.getSession().then(({ data }) => {
+      setIsLoggedIn(!!data.session);
+    });
+
+    // Escuchar cambios de sesión (login/logout)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsLoggedIn(!!session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleLogout = async () => {
+    const supabase = createBrowserClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
+    await supabase.auth.signOut();
+    toast.success('Sesión cerrada');
+    router.push('/');
+    router.refresh();
+  };
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border/50 bg-background/80 backdrop-blur-sm">
@@ -51,12 +86,30 @@ export function Navbar() {
         {/* Acciones — Desktop */}
         <div className="hidden items-center gap-2 md:flex">
           <ThemeToggle />
-          <Link href="/auth/login" className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }))}>
-            Iniciar sesión
-          </Link>
-          <Link href="/auth/register" className={cn(buttonVariants({ size: 'sm' }))}>
-            Empezar gratis
-          </Link>
+          {isLoggedIn ? (
+            <>
+              <Link
+                href="/dashboard"
+                className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }), 'gap-1.5')}
+              >
+                <LayoutDashboardIcon className="size-4" />
+                Mi dashboard
+              </Link>
+              <Button variant="outline" size="sm" className="gap-1.5" onClick={handleLogout}>
+                <LogOutIcon className="size-4" />
+                Cerrar sesión
+              </Button>
+            </>
+          ) : (
+            <>
+              <Link href="/auth/login" className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }))}>
+                Iniciar sesión
+              </Link>
+              <Link href="/auth/register" className={cn(buttonVariants({ size: 'sm' }))}>
+                Empezar gratis
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Menú hamburguesa — Mobile */}
@@ -94,20 +147,42 @@ export function Navbar() {
               </nav>
 
               <div className="flex flex-col gap-2 p-4 pt-0">
-                <Link
-                  href="/auth/login"
-                  onClick={() => setOpen(false)}
-                  className={cn(buttonVariants({ variant: 'outline' }), 'w-full justify-center')}
-                >
-                  Iniciar sesión
-                </Link>
-                <Link
-                  href="/auth/register"
-                  onClick={() => setOpen(false)}
-                  className={cn(buttonVariants(), 'w-full justify-center')}
-                >
-                  Empezar gratis
-                </Link>
+                {isLoggedIn ? (
+                  <>
+                    <Link
+                      href="/dashboard"
+                      onClick={() => setOpen(false)}
+                      className={cn(buttonVariants({ variant: 'outline' }), 'w-full justify-center gap-2')}
+                    >
+                      <LayoutDashboardIcon className="size-4" />
+                      Mi dashboard
+                    </Link>
+                    <button
+                      onClick={() => { setOpen(false); handleLogout(); }}
+                      className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-center gap-2 text-muted-foreground')}
+                    >
+                      <LogOutIcon className="size-4" />
+                      Cerrar sesión
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      href="/auth/login"
+                      onClick={() => setOpen(false)}
+                      className={cn(buttonVariants({ variant: 'outline' }), 'w-full justify-center')}
+                    >
+                      Iniciar sesión
+                    </Link>
+                    <Link
+                      href="/auth/register"
+                      onClick={() => setOpen(false)}
+                      className={cn(buttonVariants(), 'w-full justify-center')}
+                    >
+                      Empezar gratis
+                    </Link>
+                  </>
+                )}
               </div>
             </SheetContent>
           </Sheet>
