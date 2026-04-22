@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { createCulqiCharge } from '@/lib/culqi/client';
-import { createServiceClient } from '@/lib/supabase/service';
+import { prisma } from '@/lib/prisma/client';
 import { confirmPaymentSchema } from '@/lib/validations/payment';
 import { PLANS } from '@/types/database';
 
@@ -10,7 +10,6 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
 
-    // Validar el body
     const parsed = confirmPaymentSchema.safeParse(body);
     if (!parsed.success) {
       return NextResponse.json(
@@ -21,7 +20,7 @@ export async function POST(request: NextRequest) {
 
     const { token, plan_id, email } = parsed.data;
 
-    // Verificar sesión activa
+    // Verificar sesión activa (solo auth — Supabase)
     const cookieStore = await cookies();
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -34,25 +33,20 @@ export async function POST(request: NextRequest) {
               list.forEach(({ name, value, options }) =>
                 cookieStore.set(name, value, options)
               );
-            } catch {
-              // Ignorar en Server Components
-            }
+            } catch {}
           },
         },
       }
     );
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
+    const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
       return NextResponse.json({ error: 'No autenticado' }, { status: 401 });
     }
 
     const plan = PLANS[plan_id];
 
-    // Crear el cargo en Culqi
+    // Crear cargo en Culqi
     const charge = await createCulqiCharge({
       amount: plan.price_cents,
       currency_code: 'PEN',
@@ -61,7 +55,6 @@ export async function POST(request: NextRequest) {
       description: `NutriIA — Plan ${plan.name}`,
     });
 
-    // Verificar que el cargo fue exitoso
     if (charge.object_error || !charge.id) {
       console.error('[confirm] Cargo rechazado por Culqi:', charge);
       const userMessage =
@@ -69,47 +62,29 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: userMessage }, { status: 402 });
     }
 
-    // Calcular periodo de suscripción (1 mes)
     const now = new Date();
     const periodEnd = new Date(now);
     periodEnd.setMonth(periodEnd.getMonth() + 1);
 
-    // Insertar suscripción usando service role (omite RLS)
-    const serviceClient = createServiceClient();
+    // Desactivar suscripciones anteriores (Prisma — nuestra BD)
+    await prisma.subscription.updateMany({
+      where: { user_id: user.id, status: 'active' },
+      data: { status: 'inactive' },
+    });
 
-    // Desactivar suscripciones anteriores del usuario
-    await serviceClient
-      .from('subscriptions')
-      .update({ status: 'inactive' })
-      .eq('user_id', user.id)
-      .eq('status', 'active');
-
-    // Crear la nueva suscripción activa
-    const { data: subscription, error: subError } = await serviceClient
-      .from('subscriptions')
-      .insert({
+    // Crear nueva suscripción activa
+    const subscription = await prisma.subscription.create({
+      data: {
         user_id: user.id,
         plan_id,
         status: 'active',
         culqi_charge_id: charge.id,
         amount_cents: plan.price_cents,
         currency: 'PEN',
-        current_period_start: now.toISOString(),
-        current_period_end: periodEnd.toISOString(),
-        culqi_order_id: null,
-      })
-      .select()
-      .single();
-
-    if (subError) {
-      console.error('[confirm] Error al guardar suscripción:', subError);
-      // El cargo ya se procesó — no devolver error al usuario, loguear para revisión manual
-      return NextResponse.json({
-        success: true,
-        charge_id: charge.id,
-        warning: 'Cargo procesado pero error al guardar suscripción',
-      });
-    }
+        current_period_start: now,
+        current_period_end: periodEnd,
+      },
+    });
 
     // Enviar email de confirmación (non-blocking)
     try {
@@ -122,7 +97,6 @@ export async function POST(request: NextRequest) {
         chargeId: charge.id,
       });
     } catch (emailError) {
-      // El email no es crítico — loguear y continuar
       console.error('[confirm] Error al enviar email de confirmación:', emailError);
     }
 
@@ -133,9 +107,6 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error('[confirm] Error inesperado:', error);
-    return NextResponse.json(
-      { error: 'Error interno del servidor' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Error interno del servidor' }, { status: 500 });
   }
 }

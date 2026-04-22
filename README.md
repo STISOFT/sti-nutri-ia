@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://assets.vercel.com/image/upload/v1662130559/nextjs/Icon_light_background.png" alt="Next.js" width="80" />
+<img src="https://nextjs.org/icons/next.svg" alt="Next.js" width="80" />
 
 # NutriIA
 
@@ -10,7 +10,9 @@ Diseñada para el mercado peruano · Generación de planes de 30 días en segund
 
 [![Next.js](https://img.shields.io/badge/Next.js-14.2-black?logo=next.js)](https://nextjs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)](https://www.typescriptlang.org)
-[![Supabase](https://img.shields.io/badge/Supabase-Auth%20%2B%20DB-3ECF8E?logo=supabase)](https://supabase.com)
+[![Supabase Auth](https://img.shields.io/badge/Supabase-Auth-3ECF8E?logo=supabase)](https://supabase.com)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-CapRover-336791?logo=postgresql)](https://www.postgresql.org)
+[![Prisma](https://img.shields.io/badge/Prisma-v5-2D3748?logo=prisma)](https://www.prisma.io)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-v4-38BDF8?logo=tailwindcss)](https://tailwindcss.com)
 
 </div>
@@ -44,7 +46,8 @@ NutriIA genera planes de dieta personalizados de 30 días usando la API de Claud
 | Framework | Next.js 14 (App Router, TypeScript strict) |
 | UI | shadcn/ui + Tailwind CSS v4 + base-nova |
 | Autenticación | Supabase Auth (`@supabase/ssr`) |
-| Base de datos | Supabase (PostgreSQL + RLS) |
+| Base de datos | PostgreSQL propio en CapRover (vía Prisma v5) |
+| ORM | Prisma v5 |
 | IA | Anthropic Claude (`claude-sonnet-4-20250514`) |
 | Pagos | Culqi (pasarela peruana) |
 | Emails | Resend + React Email |
@@ -52,13 +55,16 @@ NutriIA genera planes de dieta personalizados de 30 días usando la API de Claud
 | Validación | Zod + React Hook Form |
 | Fuentes | Inter + Plus Jakarta Sans |
 
+> **Nota de arquitectura:** Supabase se usa **solo para autenticación** (Auth). Todos los datos de la aplicación (perfiles, suscripciones, planes de dieta) se almacenan en una instancia PostgreSQL propia desplegada en CapRover, accedida vía Prisma. Esto evita dependencia del plan de pago de Supabase.
+
 ---
 
 ## Requisitos previos
 
 - Node.js 18+
 - npm / yarn / pnpm
-- Cuenta en [Supabase](https://supabase.com)
+- Cuenta en [Supabase](https://supabase.com) (solo para Auth)
+- Instancia PostgreSQL accesible (local o servidor)
 - Cuenta en [Resend](https://resend.com) (emails)
 - Cuenta en [Culqi](https://culqi.com) (pagos — opcional para desarrollo)
 - API Key de [Anthropic](https://console.anthropic.com) (generación IA)
@@ -89,10 +95,13 @@ cp .env.local.example .env.local
 ```
 
 ```env
-# ─── SUPABASE ────────────────────────────────────────────────
+# ─── SUPABASE (solo Auth) ────────────────────────────────────
 NEXT_PUBLIC_SUPABASE_URL=https://tu-proyecto.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=tu_anon_key
 SUPABASE_SERVICE_ROLE_KEY=tu_service_role_key
+
+# ─── DATABASE (PostgreSQL propio) ────────────────────────────
+DATABASE_URL="postgresql://usuario:contraseña@host:5432/nombre_bd"
 
 # ─── ANTHROPIC CLAUDE API ────────────────────────────────────
 ANTHROPIC_API_KEY=sk-ant-...
@@ -111,19 +120,25 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 NEXT_PUBLIC_APP_NAME=NutriIA
 ```
 
-### 4. Configurar la base de datos en Supabase
+### 4. Crear las tablas en la base de datos
 
-En el SQL Editor de tu proyecto Supabase, ejecuta el schema completo ubicado en:
+Prisma crea automáticamente las tablas en tu base de datos con:
 
+```bash
+npx prisma db push
 ```
-/docs/schema.sql
-```
 
-Esto crea las 4 tablas principales con RLS habilitado:
+Esto crea las 4 tablas principales:
 - `profiles` — datos del usuario
 - `subscriptions` — suscripciones y pagos
 - `user_health_profiles` — perfil de salud para generar el plan
 - `diet_plans` — planes de dieta generados por IA
+
+Para explorar la base de datos visualmente:
+
+```bash
+npx prisma studio
+```
 
 ### 5. Levantar el servidor de desarrollo
 
@@ -152,7 +167,7 @@ sti-nutri-ia/
 │   │   └── suscripcion/
 │   ├── onboarding/         # Wizard de perfil de salud
 │   └── api/
-│       ├── auth/callback/  # Supabase OAuth callback
+│       ├── auth/           # callback + status
 │       ├── payments/       # Culqi: confirm, webhook
 │       └── diet/           # Generación IA con Claude
 ├── components/
@@ -162,12 +177,15 @@ sti-nutri-ia/
 │   └── shared/             # Navbar, Footer, CulqiCheckout
 ├── emails/                 # Plantillas React Email
 ├── lib/
-│   ├── supabase/           # Clientes browser, server, service
+│   ├── supabase/           # Clientes browser y server (Auth only)
+│   ├── prisma/             # Cliente Prisma singleton
 │   ├── claude/             # Generador de planes con IA
 │   ├── culqi/              # Cliente de pagos Culqi
 │   ├── resend/             # Mailer centralizado
 │   ├── stores/             # Zustand stores
 │   └── validations/        # Schemas Zod
+├── prisma/
+│   └── schema.prisma       # Modelos de base de datos
 └── types/
     └── database.ts         # Tipos TypeScript + constante PLANS
 ```
@@ -177,10 +195,13 @@ sti-nutri-ia/
 ## Scripts disponibles
 
 ```bash
-npm run dev      # Servidor de desarrollo con hot reload
-npm run build    # Build de producción
-npm run start    # Servidor de producción
-npm run lint     # Linter ESLint
+npm run dev          # Servidor de desarrollo con hot reload
+npm run build        # Build de producción
+npm run start        # Servidor de producción
+npm run lint         # Linter ESLint
+npx prisma db push   # Sincronizar schema con la base de datos
+npx prisma studio    # GUI para explorar la BD
+npx prisma generate  # Regenerar cliente Prisma
 ```
 
 ---
@@ -207,9 +228,11 @@ npm run lint     # Linter ESLint
 2. Selecciona la rama `release` como **Production Branch**
 3. Agrega todas las variables de entorno en **Settings → Environment Variables**
 4. Cambia `NEXT_PUBLIC_APP_URL` a tu dominio de producción
+5. Asegúrate de que `DATABASE_URL` apunte a tu base de datos accesible desde Vercel
 
 ```bash
 NEXT_PUBLIC_APP_URL=https://nutriia.pe
+DATABASE_URL=postgresql://usuario:contraseña@host:5432/bd
 ```
 
 ---

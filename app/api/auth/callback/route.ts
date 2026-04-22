@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
+import { prisma } from '@/lib/prisma/client';
 
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url);
@@ -43,7 +44,6 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(`${origin}/auth/reset-password`);
     }
 
-    // Verificar el estado del usuario para determinar a dónde redirigir
     const {
       data: { user },
     } = await supabase.auth.getUser();
@@ -52,8 +52,21 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(`${origin}/auth/login`);
     }
 
-    // Enviar email de bienvenida solo si el perfil fue creado recientemente
-    // (diferencia < 30 segundos entre created_at y now)
+    // Sincronizar perfil en nuestra BD (upsert al verificar email)
+    await prisma.profile.upsert({
+      where: { id: user.id },
+      create: {
+        id: user.id,
+        email: user.email!,
+        full_name: user.user_metadata?.full_name ?? null,
+      },
+      update: {
+        email: user.email!,
+        full_name: user.user_metadata?.full_name ?? undefined,
+      },
+    });
+
+    // Enviar email de bienvenida solo a usuarios nuevos (< 30s desde registro)
     const createdAt = new Date(user.created_at).getTime();
     const isNewUser = Date.now() - createdAt < 30_000;
     if (isNewUser && user.email) {
@@ -64,40 +77,30 @@ export async function GET(request: NextRequest) {
           fullName: user.user_metadata?.full_name ?? user.email,
         });
       } catch (err) {
-        // El email no es crítico — no bloquear el flujo
         console.error('[auth/callback] Error al enviar welcome email:', err);
       }
     }
 
-    // Verificar suscripción activa
-    const { data: subscription } = await supabase
-      .from('subscriptions')
-      .select('status')
-      .eq('user_id', user.id)
-      .eq('status', 'active')
-      .maybeSingle();
+    // Verificar suscripción activa en nuestra BD
+    const subscription = await prisma.subscription.findFirst({
+      where: { user_id: user.id, status: 'active' },
+    });
 
-    // Verificar perfil de salud
-    const { data: healthProfile } = await supabase
-      .from('user_health_profiles')
-      .select('id')
-      .eq('user_id', user.id)
-      .maybeSingle();
+    // Verificar perfil de salud en nuestra BD
+    const healthProfile = await prisma.userHealthProfile.findUnique({
+      where: { user_id: user.id },
+    });
 
     if (!subscription) {
-      // Sin suscripción → página de planes
       return NextResponse.redirect(`${origin}/planes`);
     }
 
     if (!healthProfile) {
-      // Con suscripción pero sin onboarding → onboarding
       return NextResponse.redirect(`${origin}/onboarding`);
     }
 
-    // Usuario completo → dashboard
     return NextResponse.redirect(`${origin}/dashboard`);
   }
 
-  // Sin código → redirigir a login con error
   return NextResponse.redirect(`${origin}/auth/login?error=no_code`);
 }

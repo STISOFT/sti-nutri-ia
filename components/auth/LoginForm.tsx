@@ -64,24 +64,21 @@ export function LoginForm() {
       return;
     }
 
-    // Verificar si tiene suscripción activa y perfil de salud
-    const { data: subscription } = await supabase
-      .from('subscriptions')
-      .select('status')
-      .eq('user_id', user.id)
-      .eq('status', 'active')
-      .maybeSingle();
+    // Verificar estado del usuario en nuestra BD (via API server-side)
+    const statusRes = await fetch('/api/auth/status');
+    if (!statusRes.ok) {
+      toast.error('Error al verificar el estado de tu cuenta.');
+      return;
+    }
+    const { hasSubscription, hasHealthProfile } = await statusRes.json() as {
+      hasSubscription: boolean;
+      hasHealthProfile: boolean;
+    };
 
-    const { data: healthProfile } = await supabase
-      .from('user_health_profiles')
-      .select('id')
-      .eq('user_id', user.id)
-      .maybeSingle();
-
-    if (!subscription) {
+    if (!hasSubscription) {
       // Sin suscripción activa → página de planes
       router.push('/planes');
-    } else if (!healthProfile) {
+    } else if (!hasHealthProfile) {
       // Con suscripción pero sin perfil de salud → onboarding
       router.push('/onboarding');
     } else {

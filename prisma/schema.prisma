@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ── profiles ─────────────────────────────────────────────────
+// El id coincide con el UUID del usuario en Supabase Auth
+model Profile {
+  id         String   @id
+  full_name  String?
+  email      String   @unique
+  avatar_url String?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  subscriptions  Subscription[]
+  health_profile UserHealthProfile?
+  diet_plans     DietPlan[]
+
+  @@map("profiles")
+}
+
+// ── subscriptions ─────────────────────────────────────────────
+model Subscription {
+  id                   String    @id @default(cuid())
+  user_id              String
+  plan_id              String
+  status               String    @default("pending")
+  culqi_order_id       String?
+  culqi_charge_id      String?
+  amount_cents         Int
+  currency             String    @default("PEN")
+  current_period_start DateTime?
+  current_period_end   DateTime?
+  created_at           DateTime  @default(now())
+  updated_at           DateTime  @updatedAt
+
+  profile    Profile    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  diet_plans DietPlan[]
+
+  @@map("subscriptions")
+}
+
+// ── user_health_profiles ──────────────────────────────────────
+model UserHealthProfile {
+  id                 String   @id @default(cuid())
+  user_id            String   @unique
+  age                Int
+  weight_kg          Float
+  height_cm          Float
+  goal               String
+  activity_level     String
+  preferred_foods    String[]
+  avoided_foods      String[]
+  food_allergies     String[]
+  medical_conditions String?
+  created_at         DateTime @default(now())
+  updated_at         DateTime @updatedAt
+
+  profile Profile @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("user_health_profiles")
+}
+
+// ── diet_plans ────────────────────────────────────────────────
+model DietPlan {
+  id               String   @id @default(cuid())
+  user_id          String
+  subscription_id  String?
+  month_year       String
+  plan_data        Json
+  calories_target  Int?
+  protein_target_g Int?
+  carbs_target_g   Int?
+  fat_target_g     Int?
+  generated_at     DateTime @default(now())
+  is_active        Boolean  @default(true)
+
+  profile      Profile       @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  subscription Subscription? @relation(fields: [subscription_id], references: [id])
+
+  @@map("diet_plans")
+}
+
