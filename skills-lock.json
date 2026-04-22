@@ -1,10 +1,20 @@
 {
   "version": 1,
   "skills": {
+    "ethical-hacking-methodology": {
+      "source": "sickn33/antigravity-awesome-skills",
+      "sourceType": "github",
+      "computedHash": "ac1f3dd2db16cedd162d30ad14951e0623fa1a3aabf53863a65b290a89469cc5"
+    },
     "nextjs-supabase-auth": {
       "source": "sickn33/antigravity-awesome-skills",
       "sourceType": "github",
       "computedHash": "a500cb0b508e60b36ac15ba330d34975d2e71e47e72201fc974e3440645d0389"
+    },
+    "pentest-checklist": {
+      "source": "sickn33/antigravity-awesome-skills",
+      "sourceType": "github",
+      "computedHash": "89043017805cdc645d803e49b7785d383f7f38e7c27b5ade10f6a7463482478f"
     },
     "prisma-cli": {
       "source": "prisma/skills",
@@ -30,6 +40,16 @@
       "source": "molefrog/skills",
       "sourceType": "github",
       "computedHash": "0d67e5cb5f4b6cff7e4f167dc519c1d2444c7580709b18b460a858606d06f652"
+    },
+    "security-review": {
+      "source": "affaan-m/everything-claude-code",
+      "sourceType": "github",
+      "computedHash": "9814020fb226bff5a25c01f6862be0ca2853187230e25bb092689b8ec3a23759"
+    },
+    "supabase-audit-rls": {
+      "source": "yoanbernabeu/supabase-pentest-skills",
+      "sourceType": "github",
+      "computedHash": "19722a043162d04e1465f6b8da7c6f3bbdef0b0295fa29d63504b3486847311e"
     },
     "zod-schema-validation": {
       "source": "mindrally/skills",
