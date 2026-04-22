@@ -24,10 +24,21 @@ const NAV_LINKS = [
   { label: 'Testimonios', href: '#testimonios' },
 ];
 
-export function Navbar() {
+interface NavbarProps {
+  /** Estado de autenticación pre-leído desde el servidor (evita flash de estado incorrecto). */
+  initialIsLoggedIn?: boolean;
+}
+
+export function Navbar({ initialIsLoggedIn = false }: NavbarProps) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // Iniciar con el valor del servidor para evitar el flash "no autenticado → autenticado"
+  const [isLoggedIn, setIsLoggedIn] = useState(initialIsLoggedIn);
+
+  useEffect(() => {
+    // Sincronizar con el prop del servidor al montar (por si cambia en navegación)
+    setIsLoggedIn(initialIsLoggedIn);
+  }, [initialIsLoggedIn]);
 
   useEffect(() => {
     const supabase = createBrowserClient(
@@ -35,12 +46,7 @@ export function Navbar() {
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
     );
 
-    // Verificar sesión actual
-    supabase.auth.getSession().then(({ data }) => {
-      setIsLoggedIn(!!data.session);
-    });
-
-    // Escuchar cambios de sesión (login/logout)
+    // Escuchar cambios de sesión en tiempo real (login/logout durante la sesión)
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setIsLoggedIn(!!session);
     });

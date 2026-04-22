@@ -12,10 +12,16 @@ const nextConfig = {
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           // Controla info del referrer
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          // HTTP Strict Transport Security (fuerza HTTPS en producción)
+          {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=63072000; includeSubDomains; preload',
+          },
           // Permisos del navegador (desactiva features no usadas)
+          // payment se permite desde Culqi para el checkout
           {
             key: 'Permissions-Policy',
-            value: 'camera=(), microphone=(), geolocation=(), payment=()',
+            value: 'camera=(), microphone=(), geolocation=()',
           },
           // Content Security Policy
           {
@@ -38,6 +44,8 @@ const nextConfig = {
               "worker-src blob:",
               // Object: ninguno
               "object-src 'none'",
+              // Evita embedding en iframes (complementa X-Frame-Options)
+              "frame-ancestors 'none'",
               // Base URI: solo propio
               "base-uri 'self'",
               // Form action: solo propio

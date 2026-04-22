@@ -47,6 +47,15 @@ export async function POST(request: NextRequest) {
     const plan = PLANS[plan_id];
     const isMock = process.env.CULQI_MOCK === 'true';
 
+    // Guardia de seguridad: modo mock no debe estar activo en producción
+    if (isMock && process.env.NODE_ENV === 'production') {
+      console.error('[confirm] ALERTA CRÍTICA: CULQI_MOCK=true en producción — bloqueando');
+      return NextResponse.json(
+        { error: 'Configuración de pagos no disponible' },
+        { status: 503 }
+      );
+    }
+
     // ── Modo real: crear cargo en Culqi ───────────────────────
     // ── Modo mock: saltar validación (solo desarrollo/testing) ─
     let chargeId: string;

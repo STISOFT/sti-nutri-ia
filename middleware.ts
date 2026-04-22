@@ -15,9 +15,14 @@ const PROTECTED_ROUTES = [
 const AUTH_ROUTES = ['/auth/login', '/auth/register'];
 
 export async function middleware(request: NextRequest) {
-  // Si no están configuradas las variables de entorno de Supabase,
-  // dejar pasar todas las requests (útil durante el desarrollo inicial)
+  // Las variables de entorno de Supabase son obligatorias en producción.
+  // Si faltan, bloquear todas las rutas en lugar de dejarlas abiertas.
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    if (process.env.NODE_ENV === 'production') {
+      return new NextResponse('Service unavailable: missing configuration', { status: 503 });
+    }
+    // En desarrollo, advertir pero continuar
+    console.error('[middleware] WARN: Variables de Supabase no configuradas');
     return NextResponse.next({ request });
   }
 

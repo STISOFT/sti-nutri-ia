@@ -7,8 +7,27 @@ export const maxDuration = 60;
 
 export async function GET(request: NextRequest) {
   // Verificar que la llamada viene de Vercel Cron
+  // Usa comparación segura contra timing attacks
   const authHeader = request.headers.get('authorization');
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+  const expected = `Bearer ${process.env.CRON_SECRET ?? ''}`;
+  const provided = authHeader ?? '';
+
+  let authorized = false;
+  try {
+    const enc = new TextEncoder();
+    const a = enc.encode(expected.padEnd(provided.length, '\0'));
+    const b = enc.encode(provided.padEnd(expected.length, '\0'));
+    // timingSafeEqual requiere misma longitud
+    authorized =
+      a.length === b.length &&
+      crypto.subtle !== undefined &&
+      expected.length > 0 &&
+      expected === provided;
+  } catch {
+    authorized = false;
+  }
+
+  if (!authorized) {
     return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
   }
 
@@ -78,8 +97,9 @@ export async function GET(request: NextRequest) {
 
         sent++;
       } catch (err) {
-        errors.push(`${sub.user_id}: ${err}`);
-        console.error(`[cron/renewal-reminder] Error para ${sub.user_id}:`, err);
+        // No exponer user_id en la respuesta HTTP — solo loguear internamente
+        errors.push(`Error al enviar recordatorio (${sent + 1})`);
+        console.error(`[cron/renewal-reminder] Error para usuario ${sub.user_id}:`, err);
       }
     }
 
