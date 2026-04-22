@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "skills": {
+    "nextjs-supabase-auth": {
+      "source": "sickn33/antigravity-awesome-skills",
+      "sourceType": "github",
+      "computedHash": "a500cb0b508e60b36ac15ba330d34975d2e71e47e72201fc974e3440645d0389"
+    },
+    "react-email": {
+      "source": "resend/resend-skills",
+      "sourceType": "github",
+      "computedHash": "d1fe70541c06ebf1cc58b774d35634399c466e55684776cfba6768a2079ad79b"
+    },
+    "react-pdf": {
+      "source": "molefrog/skills",
+      "sourceType": "github",
+      "computedHash": "0d67e5cb5f4b6cff7e4f167dc519c1d2444c7580709b18b460a858606d06f652"
+    },
+    "zod-schema-validation": {
+      "source": "mindrally/skills",
+      "sourceType": "github",
+      "computedHash": "f3fd474dfced1090e24af93eeabb3d85cd96e93e188cbbcc97202f5f85781b28"
+    }
+  }
+}
