@@ -52,6 +52,23 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(`${origin}/auth/login`);
     }
 
+    // Enviar email de bienvenida solo si el perfil fue creado recientemente
+    // (diferencia < 30 segundos entre created_at y now)
+    const createdAt = new Date(user.created_at).getTime();
+    const isNewUser = Date.now() - createdAt < 30_000;
+    if (isNewUser && user.email) {
+      try {
+        const { sendWelcomeEmail } = await import('@/lib/resend/mailer');
+        await sendWelcomeEmail({
+          to: user.email,
+          fullName: user.user_metadata?.full_name ?? user.email,
+        });
+      } catch (err) {
+        // El email no es crítico — no bloquear el flujo
+        console.error('[auth/callback] Error al enviar welcome email:', err);
+      }
+    }
+
     // Verificar suscripción activa
     const { data: subscription } = await supabase
       .from('subscriptions')
