@@ -1,14 +1,23 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@/generated/prisma/client';
+import { PrismaPg } from '@prisma/adapter-pg';
 
-// Singleton para evitar múltiples instancias en desarrollo con hot reload
-const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
-
-export const prisma =
-  globalForPrisma.prisma ??
-  new PrismaClient({
+// Patrón singleton para Next.js — evita múltiples instancias en hot reload
+const createPrismaClient = () => {
+  const adapter = new PrismaPg({
+    connectionString: process.env.DATABASE_URL!,
+  });
+  return new PrismaClient({
+    adapter,
     log: process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'],
   });
+};
+
+declare const globalThis: {
+  prismaGlobal: ReturnType<typeof createPrismaClient>;
+} & typeof global;
+
+export const prisma = globalThis.prismaGlobal ?? createPrismaClient();
 
 if (process.env.NODE_ENV !== 'production') {
-  globalForPrisma.prisma = prisma;
+  globalThis.prismaGlobal = prisma;
 }
