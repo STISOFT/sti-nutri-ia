@@ -31,10 +31,10 @@ interface CulqiChargeResponse {
 export async function createCulqiCharge(
   params: CulqiChargeParams
 ): Promise<CulqiChargeResponse> {
-  const secretKey = process.env.CULQI_SECRET_KEY;
+  const secretKey = process.env.CULQI_PRIVATE_KEY;
 
   if (!secretKey) {
-    throw new Error('CULQI_SECRET_KEY no configurado');
+    throw new Error('CULQI_PRIVATE_KEY no configurado');
   }
 
   const response = await fetch('https://secure.culqi.com/v2/charges', {
