@@ -26,12 +26,12 @@ export function PasswordResetEmail({ fullName, resetUrl }: PasswordResetEmailPro
   return (
     <Html lang="es">
       <Head />
-      <Preview>Recupera el acceso a tu cuenta NutriIA</Preview>
+      <Preview>Recupera el acceso a tu cuenta KODA</Preview>
       <Body style={body}>
         <Container style={container}>
           {/* Logo */}
           <Section style={logoSection}>
-            <Text style={logoText}>🌿 NutriIA</Text>
+            <Text style={logoText}>🌿 KODA</Text>
           </Section>
 
           {/* Encabezado */}
@@ -82,7 +82,7 @@ export function PasswordResetEmail({ fullName, resetUrl }: PasswordResetEmailPro
             <Text style={footerText}>
               ¿Problemas? Escríbenos a soporte@nutriia.pe
             </Text>
-            <Text style={footerText}>© 2026 NutriIA · Lima, Perú</Text>
+            <Text style={footerText}>© 2026 KODA · Lima, Perú</Text>
           </Section>
         </Container>
       </Body>

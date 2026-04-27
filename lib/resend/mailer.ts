@@ -1,5 +1,5 @@
 // ============================================================
-// MAILER — NutriIA
+// MAILER — KODA
 // Cliente centralizado de Resend + React Email.
 // Todas las funciones son non-blocking (try/catch externo).
 // ============================================================
@@ -13,7 +13,7 @@ import { SubscriptionRenewalEmail } from '@/emails/SubscriptionRenewalEmail';
 import { PasswordResetEmail } from '@/emails/PasswordResetEmail';
 
 // Dirección de envío — configurable por variable de entorno
-const FROM = process.env.RESEND_FROM_EMAIL ?? 'NutriIA <hola@nutriia.pe>';
+const FROM = process.env.RESEND_FROM_EMAIL ?? 'KODA <hola@nutriia.pe>';
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://nutriia.pe';
 
 function getResend(): Resend {
@@ -76,7 +76,7 @@ export async function sendWelcomeEmail({ to, fullName }: WelcomeEmailParams): Pr
   await resend.emails.send({
     from: FROM,
     to,
-    subject: '¡Bienvenido a NutriIA! Tu plan de dieta con IA te espera',
+    subject: '¡Bienvenido a KODA! Tu plan de dieta con IA te espera',
     html,
   });
 }
@@ -106,7 +106,7 @@ export async function sendPaymentConfirmationEmail({
   await resend.emails.send({
     from: FROM,
     to,
-    subject: `✅ Pago confirmado — Plan ${planName} activado en NutriIA`,
+    subject: `✅ Pago confirmado — Plan ${planName} activado en KODA`,
     html,
   });
 }
@@ -140,7 +140,7 @@ export async function sendDietPlanReadyEmail({
   await resend.emails.send({
     from: FROM,
     to,
-    subject: `🎉 Tu plan de dieta de ${monthYear} está listo — NutriIA`,
+    subject: `🎉 Tu plan de dieta de ${monthYear} está listo — KODA`,
     html,
   });
 }
@@ -170,7 +170,7 @@ export async function sendRenewalReminderEmail({
   await resend.emails.send({
     from: FROM,
     to,
-    subject: `🔔 Tu suscripción NutriIA se renueva el ${renewalDate}`,
+    subject: `🔔 Tu suscripción KODA se renueva el ${renewalDate}`,
     html,
   });
 }
@@ -193,7 +193,7 @@ export async function sendPasswordResetEmail({
   await resend.emails.send({
     from: FROM,
     to,
-    subject: 'Recupera el acceso a tu cuenta NutriIA',
+    subject: 'Recupera el acceso a tu cuenta KODA',
     html,
   });
 }

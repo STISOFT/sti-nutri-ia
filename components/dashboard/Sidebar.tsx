@@ -55,7 +55,7 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
           <div className="flex size-7 items-center justify-center rounded-md bg-primary">
             <LeafIcon className="size-4 text-primary-foreground" />
           </div>
-          <span className="text-base">NutriIA</span>
+          <span className="text-base">KODA</span>
         </Link>
       </div>
 

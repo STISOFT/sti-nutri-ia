@@ -6,7 +6,7 @@ import { prisma } from '@/lib/prisma/client';
 import { OnboardingWizard } from '@/components/dashboard/OnboardingWizard';
 
 export const metadata: Metadata = {
-  title: 'Configura tu perfil — NutriIA',
+  title: 'Configura tu perfil — KODA',
   robots: { index: false },
 };
 

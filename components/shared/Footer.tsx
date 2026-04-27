@@ -32,7 +32,7 @@ export function Footer() {
               <div className="flex size-7 items-center justify-center rounded-md bg-primary">
                 <LeafIcon className="size-4 text-primary-foreground" />
               </div>
-              <span>NutriIA</span>
+              <span>KODA</span>
             </Link>
             <p className="text-sm text-muted-foreground">
               Planes de alimentación personalizados con IA para el mercado peruano.
@@ -98,10 +98,10 @@ export function Footer() {
 
         <div className="flex flex-col items-center justify-between gap-4 text-center sm:flex-row">
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} NutriIA. Todos los derechos reservados.
+            © {new Date().getFullYear()} KODA. Todos los derechos reservados.
           </p>
           <p className="text-xs text-muted-foreground">
-            NutriIA no reemplaza el consejo médico profesional.
+            KODA no reemplaza el consejo médico profesional.
           </p>
         </div>
       </div>

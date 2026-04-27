@@ -2,7 +2,7 @@
 
 <img src="https://nextjs.org/icons/next.svg" alt="Next.js" width="80" />
 
-# NutriIA
+# KODA
 
 **Plataforma SaaS de planes de alimentación personalizados con Inteligencia Artificial**
 
@@ -19,9 +19,9 @@ Diseñada para el mercado peruano · Generación de planes de 30 días en segund
 
 ---
 
-## ¿Qué es NutriIA?
+## ¿Qué es KODA?
 
-NutriIA genera planes de dieta personalizados de 30 días usando la API de Claude (Anthropic). El usuario completa su perfil de salud (peso, talla, objetivo, preferencias alimentarias peruanas) y en segundos recibe un plan completo con:
+KODA genera planes de dieta personalizados de 30 días usando la API de Claude (Anthropic). El usuario completa su perfil de salud (peso, talla, objetivo, preferencias alimentarias peruanas) y en segundos recibe un plan completo con:
 
 - 5 comidas diarias organizadas por semana
 - Macros calculados (calorías, proteínas, carbohidratos, grasas)
@@ -108,7 +108,7 @@ ANTHROPIC_API_KEY=sk-ant-...
 
 # ─── RESEND (emails transaccionales) ─────────────────────────
 RESEND_API_KEY=re_...
-RESEND_FROM_EMAIL=NutriIA <hola@tudominio.com>
+RESEND_FROM_EMAIL=KODA <hola@tudominio.com>
 
 # ─── CULQI (pasarela de pagos Perú) ──────────────────────────
 NEXT_PUBLIC_CULQI_PUBLIC_KEY=pk_live_...
@@ -117,7 +117,7 @@ CULQI_WEBHOOK_SECRET=...
 
 # ─── APP ─────────────────────────────────────────────────────
 NEXT_PUBLIC_APP_URL=http://localhost:3000
-NEXT_PUBLIC_APP_NAME=NutriIA
+NEXT_PUBLIC_APP_NAME=KODA
 ```
 
 ### 4. Crear las tablas en la base de datos

@@ -7,9 +7,9 @@ import {
 
 const FAQS = [
   {
-    question: '¿Qué es NutriIA y cómo funciona?',
+    question: '¿Qué es KODA y cómo funciona?',
     answer:
-      'NutriIA es una plataforma que usa inteligencia artificial (Claude AI de Anthropic) para crear planes de alimentación de 30 días totalmente personalizados. Completas tu perfil con tus datos físicos y preferencias, y en menos de un minuto recibes un plan con 5 comidas diarias adaptadas a ti.',
+      'KODA es una plataforma que usa inteligencia artificial (Claude AI de Anthropic) para crear planes de alimentación de 30 días totalmente personalizados. Completas tu perfil con tus datos físicos y preferencias, y en menos de un minuto recibes un plan con 5 comidas diarias adaptadas a ti.',
   },
   {
     question: '¿Incluye alimentos peruanos?',

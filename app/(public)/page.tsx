@@ -8,11 +8,11 @@ import { CTABanner } from '@/components/landing/CTABanner';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'NutriIA - Plan de Dieta Personalizado con IA | Perú',
+  title: 'KODA - Plan de Dieta Personalizado con IA | Perú',
   description:
     'Recibe tu plan de alimentación de 30 días personalizado con inteligencia artificial. Adaptado a tu cuerpo, tus objetivos y la gastronomía peruana. Desde S/29/mes.',
   openGraph: {
-    title: 'NutriIA - Plan de Dieta Personalizado con IA',
+    title: 'KODA - Plan de Dieta Personalizado con IA',
     description:
       'Plan de alimentación de 30 días generado por IA. Adaptado a ti, con alimentos peruanos. Desde S/29/mes.',
     type: 'website',

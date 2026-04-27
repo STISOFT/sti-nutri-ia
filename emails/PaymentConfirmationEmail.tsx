@@ -42,12 +42,12 @@ export function PaymentConfirmationEmail({
   return (
     <Html lang="es">
       <Head />
-      <Preview>Pago confirmado — Plan {planName} activado en NutriIA</Preview>
+      <Preview>Pago confirmado — Plan {planName} activado en KODA</Preview>
       <Body style={body}>
         <Container style={container}>
           {/* Logo */}
           <Section style={logoSection}>
-            <Text style={logoText}>🌿 NutriIA</Text>
+            <Text style={logoText}>🌿 KODA</Text>
           </Section>
 
           {/* Encabezado */}
@@ -109,7 +109,7 @@ export function PaymentConfirmationEmail({
             <Text style={footerText}>
               ¿Problemas con tu pago? Escríbenos a soporte@nutriia.pe
             </Text>
-            <Text style={footerText}>© 2026 NutriIA · Lima, Perú</Text>
+            <Text style={footerText}>© 2026 KODA · Lima, Perú</Text>
           </Section>
         </Container>
       </Body>

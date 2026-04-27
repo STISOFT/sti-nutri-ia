@@ -158,7 +158,7 @@ export function CulqiCheckout({
           return;
         }
 
-        toast.success('¡Pago exitoso! Bienvenido a NutriIA.');
+        toast.success('¡Pago exitoso! Bienvenido a KODA.');
         onSuccess?.();
         router.push('/onboarding');
         router.refresh();
@@ -211,7 +211,7 @@ export function CulqiCheckout({
 
     window.Culqi.publicKey = publicKey;
     window.Culqi.settings({
-      title: 'NutriIA',
+      title: 'KODA',
       currency: 'PEN',
       description: `Plan ${plan.name} — 1 mes`,
       amount: plan.price_cents,

@@ -43,7 +43,7 @@ export default async function DashboardLayout({
         {/* Header móvil */}
         <header className="flex h-14 items-center gap-3 border-b border-border bg-card px-4 lg:hidden">
           <MobileSidebarTrigger />
-          <span className="font-semibold text-foreground">NutriIA</span>
+          <span className="font-semibold text-foreground">KODA</span>
         </header>
 
         <main className="flex-1 p-4 md:p-6 lg:p-8">{children}</main>

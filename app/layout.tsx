@@ -18,7 +18,7 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: 'NutriIA - Plan de Dieta Personalizado con IA',
+  title: 'KODA - Plan de Dieta Personalizado con IA',
   description:
     'Recibe tu plan de alimentación de 30 días personalizado con inteligencia artificial. Adaptado a tus objetivos, preferencias y contexto peruano.',
   keywords: ['dieta', 'nutrición', 'plan alimenticio', 'inteligencia artificial', 'Perú'],

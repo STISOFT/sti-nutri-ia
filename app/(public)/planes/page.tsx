@@ -12,7 +12,7 @@ import { cn } from '@/lib/utils';
 import { PlanesCheckoutClient } from '@/components/shared/PlanesCheckoutClient';
 
 export const metadata: Metadata = {
-  title: 'Planes y Precios — NutriIA',
+  title: 'Planes y Precios — KODA',
   description: 'Elige el plan de dieta personalizada con IA que mejor se adapta a tus objetivos.',
 };
 

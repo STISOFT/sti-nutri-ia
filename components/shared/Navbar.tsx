@@ -73,7 +73,7 @@ export function Navbar({ initialIsLoggedIn = false }: NavbarProps) {
           <div className="flex size-7 items-center justify-center rounded-md bg-primary">
             <LeafIcon className="size-4 text-primary-foreground" />
           </div>
-          <span className="text-lg">NutriIA</span>
+          <span className="text-lg">KODA</span>
         </Link>
 
         {/* Links de navegación — Desktop */}
@@ -135,7 +135,7 @@ export function Navbar({ initialIsLoggedIn = false }: NavbarProps) {
                   <div className="flex size-6 items-center justify-center rounded-md bg-primary">
                     <LeafIcon className="size-3.5 text-primary-foreground" />
                   </div>
-                  NutriIA
+                  KODA
                 </SheetTitle>
               </SheetHeader>
 

@@ -160,11 +160,11 @@ export function PdfDocument({ planData }: PdfDocumentProps) {
   const { summary, weeks } = planData;
 
   return (
-    <Document title="Mi Plan NutriIA" author="NutriIA">
+    <Document title="Mi Plan KODA" author="KODA">
       {/* Página 1: Resumen */}
       <Page size="A4" style={styles.page}>
         <View style={styles.header}>
-          <Text style={styles.title}>NutriIA — Plan de Alimentación</Text>
+          <Text style={styles.title}>KODA — Plan de Alimentación</Text>
           <Text style={styles.subtitle}>Plan personalizado de 4 semanas</Text>
         </View>
 
@@ -197,7 +197,7 @@ export function PdfDocument({ planData }: PdfDocumentProps) {
         </View>
 
         <Text style={styles.footer}>
-          Generado por NutriIA · Este plan es orientativo y no reemplaza consulta médica profesional
+          Generado por KODA · Este plan es orientativo y no reemplaza consulta médica profesional
         </Text>
       </Page>
 
@@ -239,7 +239,7 @@ export function PdfDocument({ planData }: PdfDocumentProps) {
           ))}
 
           <Text style={styles.footer}>
-            Generado por NutriIA · Este plan es orientativo y no reemplaza consulta médica profesional
+            Generado por KODA · Este plan es orientativo y no reemplaza consulta médica profesional
           </Text>
         </Page>
       ))}

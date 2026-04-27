@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Términos de Servicio — NutriIA',
+  title: 'Términos de Servicio — KODA',
 };
 
 export default function TerminosPage() {
@@ -15,7 +15,7 @@ export default function TerminosPage() {
         <section>
           <h2 className="mb-2 font-semibold text-foreground">1. Aceptación de los términos</h2>
           <p>
-            Al acceder o usar NutriIA, aceptas estar sujeto a estos Términos de Servicio. Si no
+            Al acceder o usar KODA, aceptas estar sujeto a estos Términos de Servicio. Si no
             estás de acuerdo, no debes usar el servicio.
           </p>
         </section>
@@ -23,7 +23,7 @@ export default function TerminosPage() {
         <section>
           <h2 className="mb-2 font-semibold text-foreground">2. Descripción del servicio</h2>
           <p>
-            NutriIA es una plataforma SaaS que genera planes de alimentación personalizados
+            KODA es una plataforma SaaS que genera planes de alimentación personalizados
             utilizando inteligencia artificial. Los planes son orientativos y no reemplazan la
             consulta con un profesional de la salud o nutricionista certificado.
           </p>
@@ -32,7 +32,7 @@ export default function TerminosPage() {
         <section>
           <h2 className="mb-2 font-semibold text-foreground">3. Uso aceptable</h2>
           <p>
-            Te comprometes a usar NutriIA únicamente para fines personales y no comerciales. Está
+            Te comprometes a usar KODA únicamente para fines personales y no comerciales. Está
             prohibido compartir, revender o redistribuir los planes generados.
           </p>
         </section>
@@ -49,7 +49,7 @@ export default function TerminosPage() {
         <section>
           <h2 className="mb-2 font-semibold text-foreground">5. Limitación de responsabilidad</h2>
           <p>
-            NutriIA no se responsabiliza por resultados específicos de salud derivados del uso de
+            KODA no se responsabiliza por resultados específicos de salud derivados del uso de
             los planes generados. Consulta siempre a un profesional médico antes de iniciar
             cualquier dieta.
           </p>

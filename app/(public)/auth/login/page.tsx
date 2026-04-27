@@ -4,7 +4,7 @@ import { LeafIcon } from 'lucide-react';
 import { LoginForm } from '@/components/auth/LoginForm';
 
 export const metadata: Metadata = {
-  title: 'Iniciar sesión — NutriIA',
+  title: 'Iniciar sesión — KODA',
   description: 'Accede a tu cuenta y consulta tu plan de alimentación personalizado.',
   robots: { index: false },
 };
@@ -17,7 +17,7 @@ export default function LoginPage() {
         <div className="flex size-8 items-center justify-center rounded-md bg-primary">
           <LeafIcon className="size-4 text-primary-foreground" />
         </div>
-        <span className="text-xl">NutriIA</span>
+        <span className="text-xl">KODA</span>
       </Link>
 
       {/* Tarjeta del formulario */}

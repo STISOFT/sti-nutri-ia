@@ -26,19 +26,19 @@ export function WelcomeEmail({ fullName, plansUrl }: WelcomeEmailProps) {
   return (
     <Html lang="es">
       <Head />
-      <Preview>Bienvenido a NutriIA — tu plan de dieta personalizado te espera</Preview>
+      <Preview>Bienvenido a KODA — tu plan de dieta personalizado te espera</Preview>
       <Body style={body}>
         <Container style={container}>
           {/* Logo */}
           <Section style={logoSection}>
-            <Text style={logoText}>🌿 NutriIA</Text>
+            <Text style={logoText}>🌿 KODA</Text>
           </Section>
 
           {/* Encabezado */}
           <Section style={section}>
             <Heading style={h1}>¡Hola, {firstName}!</Heading>
             <Text style={p}>
-              Bienvenido a <strong>NutriIA</strong>. Estás a un paso de tener
+              Bienvenido a <strong>KODA</strong>. Estás a un paso de tener
               tu plan de alimentación personalizado con inteligencia artificial.
             </Text>
           </Section>
@@ -94,10 +94,10 @@ export function WelcomeEmail({ fullName, plansUrl }: WelcomeEmailProps) {
           <Hr style={hr} />
           <Section style={footer}>
             <Text style={footerText}>
-              © 2026 NutriIA · Lima, Perú
+              © 2026 KODA · Lima, Perú
             </Text>
             <Text style={footerText}>
-              Recibiste este correo porque te registraste en NutriIA.
+              Recibiste este correo porque te registraste en KODA.
             </Text>
           </Section>
         </Container>

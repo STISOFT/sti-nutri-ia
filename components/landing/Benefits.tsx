@@ -53,7 +53,7 @@ export function Benefits() {
         {/* Encabezado */}
         <div className="mb-16 text-center">
           <h2 className="font-display text-3xl font-bold text-foreground md:text-4xl">
-            ¿Por qué NutriIA?
+            ¿Por qué KODA?
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
             No es otra app de dieta genérica. Es tu plan personal, hecho a tu medida,

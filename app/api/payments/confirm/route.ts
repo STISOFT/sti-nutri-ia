@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
         currency_code: 'PEN',
         email,
         source_id: token,
-        description: `NutriIA — Plan ${plan.name}`,
+        description: `KODA — Plan ${plan.name}`,
       });
 
       if (charge.object_error || !charge.id) {

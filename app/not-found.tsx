@@ -11,7 +11,7 @@ export default function NotFound() {
         <div className="flex size-8 items-center justify-center rounded-md bg-primary">
           <LeafIcon className="size-4 text-primary-foreground" />
         </div>
-        <span className="text-xl">NutriIA</span>
+        <span className="text-xl">KODA</span>
       </Link>
 
       {/* 404 */}

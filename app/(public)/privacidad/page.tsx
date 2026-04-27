@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Política de Privacidad — NutriIA',
+  title: 'Política de Privacidad — KODA',
 };
 
 export default function PrivacidadPage() {

@@ -5,7 +5,7 @@ import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 export const metadata: Metadata = {
-  title: 'Verifica tu correo — NutriIA',
+  title: 'Verifica tu correo — KODA',
   robots: { index: false },
 };
 
@@ -23,7 +23,7 @@ export default async function VerifyEmailPage({ searchParams }: Props) {
         <div className="flex size-8 items-center justify-center rounded-md bg-primary">
           <LeafIcon className="size-4 text-primary-foreground" />
         </div>
-        <span className="text-xl">NutriIA</span>
+        <span className="text-xl">KODA</span>
       </Link>
 
       {/* Tarjeta de verificación */}
@@ -58,7 +58,7 @@ export default async function VerifyEmailPage({ searchParams }: Props) {
         <ol className="mt-6 flex flex-col gap-2 text-left text-sm">
           {[
             'Abre tu bandeja de entrada',
-            'Busca el correo de NutriIA',
+            'Busca el correo de KODA',
             'Haz clic en "Verificar mi cuenta"',
           ].map((paso, i) => (
             <li key={i} className="flex items-start gap-3">

@@ -46,12 +46,12 @@ export function DietPlanReadyEmail({
   return (
     <Html lang="es">
       <Head />
-      <Preview>Tu plan de dieta de {monthYear} está listo — NutriIA</Preview>
+      <Preview>Tu plan de dieta de {monthYear} está listo — KODA</Preview>
       <Body style={body}>
         <Container style={container}>
           {/* Logo */}
           <Section style={logoSection}>
-            <Text style={logoText}>🌿 NutriIA</Text>
+            <Text style={logoText}>🌿 KODA</Text>
           </Section>
 
           {/* Encabezado */}
@@ -131,7 +131,7 @@ export function DietPlanReadyEmail({
           {/* Footer */}
           <Hr style={hr} />
           <Section style={footer}>
-            <Text style={footerText}>© 2026 NutriIA · Lima, Perú</Text>
+            <Text style={footerText}>© 2026 KODA · Lima, Perú</Text>
           </Section>
         </Container>
       </Body>

@@ -4,7 +4,7 @@ import { LeafIcon } from 'lucide-react';
 import { RegisterForm } from '@/components/auth/RegisterForm';
 
 export const metadata: Metadata = {
-  title: 'Crear cuenta — NutriIA',
+  title: 'Crear cuenta — KODA',
   description: 'Regístrate gratis y obtén tu plan de alimentación personalizado con IA.',
   robots: { index: false },
 };
@@ -17,7 +17,7 @@ export default function RegisterPage() {
         <div className="flex size-8 items-center justify-center rounded-md bg-primary">
           <LeafIcon className="size-4 text-primary-foreground" />
         </div>
-        <span className="text-xl">NutriIA</span>
+        <span className="text-xl">KODA</span>
       </Link>
 
       {/* Tarjeta del formulario */}

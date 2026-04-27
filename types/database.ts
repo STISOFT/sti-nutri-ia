@@ -1,5 +1,5 @@
 // ============================================================
-// TIPOS DE BASE DE DATOS — NutriIA
+// TIPOS DE BASE DE DATOS — KODA
 // Corresponden exactamente al esquema SQL de Supabase
 // ============================================================
 

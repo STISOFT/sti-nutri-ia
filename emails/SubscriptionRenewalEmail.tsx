@@ -36,12 +36,12 @@ export function SubscriptionRenewalEmail({
   return (
     <Html lang="es">
       <Head />
-      <Preview>Tu suscripción NutriIA se renueva el {renewalDate}</Preview>
+      <Preview>Tu suscripción KODA se renueva el {renewalDate}</Preview>
       <Body style={body}>
         <Container style={container}>
           {/* Logo */}
           <Section style={logoSection}>
-            <Text style={logoText}>🌿 NutriIA</Text>
+            <Text style={logoText}>🌿 KODA</Text>
           </Section>
 
           {/* Encabezado */}
@@ -93,7 +93,7 @@ export function SubscriptionRenewalEmail({
             <Text style={footerText}>
               ¿Necesitas ayuda? Escríbenos a soporte@nutriia.pe
             </Text>
-            <Text style={footerText}>© 2026 NutriIA · Lima, Perú</Text>
+            <Text style={footerText}>© 2026 KODA · Lima, Perú</Text>
           </Section>
         </Container>
       </Body>
