@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Build standalone para imagen Docker mínima (CapRover)
+  output: 'standalone',
+
   // Headers de seguridad HTTP para todas las rutas
   async headers() {
     return [
