@@ -28,7 +28,8 @@ ENV NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL \
     NEXT_PUBLIC_CULQI_MOCK=$NEXT_PUBLIC_CULQI_MOCK \
     NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL \
     NEXT_PUBLIC_APP_NAME=$NEXT_PUBLIC_APP_NAME \
-    NEXT_TELEMETRY_DISABLED=1
+    NEXT_TELEMETRY_DISABLED=1 \
+    DATABASE_URL="postgresql://placeholder:placeholder@localhost:5432/placeholder?schema=public"
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
