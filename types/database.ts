@@ -14,7 +14,7 @@ export interface Profile {
 }
 
 // ── TABLA: subscriptions ──────────────────────────────────────
-export type PlanId = 'basico' | 'estandar' | 'premium';
+export type PlanId = 'inicio' | 'core' | 'pro';
 export type SubscriptionStatus = 'active' | 'inactive' | 'cancelled' | 'pending';
 
 export interface Subscription {
@@ -143,45 +143,57 @@ export type Database = {
 
 // ── PLANES DE SUSCRIPCIÓN ─────────────────────────────────────
 export const PLANS = {
-  basico: {
-    id: 'basico' as PlanId,
-    name: 'Básico',
-    price_soles: 29,
-    price_cents: 2900,
+  inicio: {
+    id: 'inicio' as PlanId,
+    name: 'PLAN INICIO',
+    subtitle: 'Empieza a corregir tu cuerpo',
+    target: 'Personas que están empezando o necesitan una base clara',
+    cta: 'Empezar',
+    price_soles: 29.9,
+    price_cents: 2990,
     features: [
-      'Plan de dieta mensual personalizado',
-      'Generado por IA con tus datos',
-      'Descarga en PDF',
-      'Soporte por email',
+      'Estructura base de alimentación (simple y clara)',
+      'Rutina de entrenamiento (gym o calistenia) según tu nivel',
+      'Guía práctica para organizar tu día',
+      'Recomendaciones generales',
     ],
     generations_per_month: 1,
     highlight: false,
   },
-  estandar: {
-    id: 'estandar' as PlanId,
-    name: 'Estándar',
-    price_soles: 49,
-    price_cents: 4900,
+  core: {
+    id: 'core' as PlanId,
+    name: 'PLAN CORE',
+    subtitle: 'Optimiza tu cuerpo de verdad',
+    target: 'Personas que quieren resultados reales y adaptados',
+    cta: 'Empezar con KODA',
+    price_soles: 59.9,
+    price_cents: 5990,
     features: [
-      'Todo lo del plan Básico',
-      'Hasta 2 regeneraciones del plan por mes',
-      'Ajuste de plan por cambio de objetivo',
-      'Lista de compras semanal incluida',
+      'Alimentación adaptada a tu rutina (horarios, comidas y hábitos)',
+      'Rutina según tu etapa (gym o calistenia)',
+      'Ajuste quincenal según tu progreso',
+      'Seguimiento y soporte continuo',
+      'Recomendaciones específicas acorde a tu rutina',
+      'Curso base en video para aprender calistenia',
     ],
     generations_per_month: 2,
     highlight: true, // Plan recomendado
   },
-  premium: {
-    id: 'premium' as PlanId,
-    name: 'Premium',
-    price_soles: 79,
-    price_cents: 7900,
+  pro: {
+    id: 'pro' as PlanId,
+    name: 'PLAN PRO',
+    subtitle: 'Corrección completa + soporte',
+    target: 'Personas que quieren hacerlo al 100% y acelerar resultados',
+    cta: 'Acceder',
+    price_soles: 99.9,
+    price_cents: 9990,
     features: [
-      'Todo lo del plan Estándar',
-      'Regeneraciones ilimitadas',
-      'Plan de hidratación incluido',
-      'Recetas detalladas por semana',
-      'Soporte prioritario por WhatsApp',
+      'Estrategia de alimentación totalmente personalizada',
+      'Ajustes frecuentes según tu progreso',
+      'Prioridad en revisión y acompañamiento directo',
+      'Llamadas y evaluación semanal',
+      'Acceso a comunidad privada',
+      'Beneficios adicionales (descuentos, entrenamientos, etc.)',
     ],
     generations_per_month: -1, // -1 = ilimitado
     highlight: false,

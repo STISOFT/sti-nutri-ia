@@ -9,7 +9,7 @@ const TESTIMONIALS = [
     avatar: 'VH',
     rating: 5,
     quote:
-      'Por fin un plan que incluye cebiche, lomo saltado y todo lo que me gusta. La IA entiende que soy peruana y no me pone a comer cosas raras. Bajé 6 kg siguiéndolo.',
+      'En la primera semana me sentí menos inflamada y más ligera. En el primer mes bajé 6 kilos sin dejar de comer lo que me gusta y ahora tengo una estructura clara.',
   },
   {
     name: 'Carlos Mendoza',
@@ -18,7 +18,7 @@ const TESTIMONIALS = [
     avatar: 'CM',
     rating: 5,
     quote:
-      'Entreno en el gym y necesitaba más proteína. El plan ajustó todo automáticamente con quinua, huevo y pollo. Subí músculo sin subir grasa.',
+      'Lo que más me ayudó fue saber exactamente qué hacer. Ya no estoy improvisando en el gym ni con la comida.',
   },
   {
     name: 'Patricia Quispe',
@@ -27,7 +27,7 @@ const TESTIMONIALS = [
     avatar: 'PQ',
     rating: 5,
     quote:
-      'Tengo hipotiroidismo y el plan respetó mis restricciones sin que tuviera que explicar nada técnico. El soporte respondió en menos de 24 horas. Muy recomendado.',
+      'Tengo hipotiroidismo y siempre me costó bajar. Con el plan me siento con más energía y por fin veo cambios.',
   },
 ];
 

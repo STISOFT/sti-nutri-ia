@@ -34,30 +34,32 @@ export function Pricing() {
                   : 'relative'
               }
             >
-              {/* Badge "Más popular" para el plan destacado */}
+              {/* Badge "Recomendado" para el plan destacado */}
               {plan.highlight && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <Badge className="px-3 py-0.5 text-xs">Más popular</Badge>
+                  <Badge className="px-3 py-0.5 text-xs">🔥 Recomendado</Badge>
                 </div>
               )}
 
               <CardHeader>
                 <CardTitle className="text-lg">{plan.name}</CardTitle>
-                <CardDescription>
-                  {plan.id === 'basico' && 'Ideal para empezar'}
-                  {plan.id === 'estandar' && 'El preferido de nuestros usuarios'}
-                  {plan.id === 'premium' && 'Para quienes quieren todo'}
-                </CardDescription>
+                <CardDescription>{plan.subtitle}</CardDescription>
               </CardHeader>
 
               <CardContent className="flex flex-col gap-5">
                 {/* Precio */}
                 <div className="flex items-baseline gap-1">
                   <span className="font-display text-4xl font-bold text-foreground">
-                    S/{plan.price_soles}
+                    S/{plan.price_soles.toFixed(2)}
                   </span>
                   <span className="text-sm text-muted-foreground">/mes</span>
                 </div>
+
+                {/* Dirigido a */}
+                <p className="text-sm text-muted-foreground">
+                  <span className="font-medium text-foreground">Dirigido a: </span>
+                  {plan.target}
+                </p>
 
                 <Separator />
 
@@ -79,7 +81,7 @@ export function Pricing() {
                     'mt-auto w-full'
                   )}
                 >
-                  Empezar con {plan.name}
+                  {plan.cta}
                 </Link>
               </CardContent>
             </Card>

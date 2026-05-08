@@ -1,26 +1,26 @@
-import { UserPlusIcon, ClipboardListIcon, UtensilsCrossedIcon } from 'lucide-react';
+import { ClipboardListIcon, SparklesIcon, TrendingUpIcon } from 'lucide-react';
 
 const STEPS = [
   {
     number: '01',
-    icon: UserPlusIcon,
-    title: 'Regístrate y elige tu plan',
+    icon: ClipboardListIcon,
+    title: 'Responde sobre ti',
     description:
-      'Crea tu cuenta en segundos y selecciona el plan que mejor se adapte a tus necesidades. Desde S/29 al mes.',
+      'Cuéntanos tu objetivo, tu rutina y cómo es tu día a día.',
   },
   {
     number: '02',
-    icon: ClipboardListIcon,
-    title: 'Completa tu perfil de salud',
+    icon: SparklesIcon,
+    title: 'Creamos tu plan',
     description:
-      'Cuéntanos tu edad, peso, estatura, objetivo y preferencias alimentarias. Solo toma 2 minutos.',
+      'KODA analiza tus respuestas y arma tu alimentación y entrenamiento.',
   },
   {
     number: '03',
-    icon: UtensilsCrossedIcon,
-    title: 'Recibe tu plan personalizado',
+    icon: TrendingUpIcon,
+    title: 'Empieza y ajusta',
     description:
-      'La IA genera tu plan de 30 días al instante: desayuno, media mañana, almuerzo, media tarde y cena cada día.',
+      'Sigues tu plan y lo vamos ajustando temporalmente.',
   },
 ];
 
