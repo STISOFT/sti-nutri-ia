@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 // IDs de plan válidos
-const planIds = ['basico', 'estandar', 'premium'] as const;
+const planIds = ['inicio', 'core', 'pro'] as const;
 
 // Schema para confirmar un pago (cliente → /api/payments/confirm)
 export const confirmPaymentSchema = z.object({

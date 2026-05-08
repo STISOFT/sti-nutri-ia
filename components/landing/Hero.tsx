@@ -18,22 +18,21 @@ export function Hero() {
         <div className="mb-6 flex justify-center">
           <Badge variant="outline" className="gap-1.5 px-3 py-1 text-sm">
             <SparklesIcon className="size-3.5 text-primary" />
-            Planes personalizados con IA
+            Sistema personalizado con IA
           </Badge>
         </div>
 
         {/* Titular principal */}
         <h1 className="font-display text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
-          Tu plan de dieta{' '}
-          <span className="text-primary">personalizado</span>
-          <br />
-          con inteligencia artificial
+          Tu cuerpo no necesita{' '}
+          <span className="text-primary">otra dieta</span>
         </h1>
 
         {/* Subtítulo */}
         <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground md:text-xl">
-          Recibe un plan de alimentación de 30 días creado por IA, adaptado a tus
-          objetivos, tu cuerpo y la gastronomía peruana. Sin dietas genéricas.
+          Necesita un sistema que entienda cómo funciona. KODA crea tu plan de
+          alimentación y entrenamiento adaptado a tu cuerpo, tu rutina y lo que
+          realmente puedes sostener.
         </p>
 
         {/* CTAs */}
@@ -42,14 +41,14 @@ export function Hero() {
             href="/auth/register"
             className={cn(buttonVariants({ size: 'lg' }), 'h-11 gap-2 px-8 text-base')}
           >
-            Empezar gratis
+            Crear mi plan ahora
             <ArrowRightIcon className="size-4" />
           </Link>
           <Link
-            href="#precios"
+            href="#como-funciona"
             className={cn(buttonVariants({ variant: 'outline', size: 'lg' }), 'h-11 px-8 text-base')}
           >
-            Ver planes
+            Ver cómo funciona
           </Link>
         </div>
 
@@ -57,7 +56,7 @@ export function Hero() {
         <p className="mt-8 text-sm text-muted-foreground">
           Más de{' '}
           <span className="font-semibold text-foreground">1,200 personas</span>{' '}
-          ya tienen su plan personalizado
+          ya dejaron de adivinar qué hacer con su cuerpo
         </p>
       </div>
     </section>

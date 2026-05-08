@@ -1,48 +1,48 @@
 import {
-  BrainIcon,
-  UtensilsIcon,
+  UserIcon,
+  CompassIcon,
+  SparkleIcon,
   ClockIcon,
-  ShieldCheckIcon,
   RefreshCwIcon,
-  HeartIcon,
+  BrainIcon,
 } from 'lucide-react';
 
 const BENEFITS = [
   {
-    icon: BrainIcon,
-    title: 'Generado por IA avanzada',
+    icon: UserIcon,
+    title: 'Hecho para ti',
     description:
-      'Claude AI analiza tus datos físicos, objetivos y preferencias para crear un plan 100% único para ti.',
+      'No es una dieta genérica. Se adapta a tu cuerpo, tu objetivo y tu rutina diaria.',
   },
   {
-    icon: UtensilsIcon,
-    title: 'Comida peruana incluida',
+    icon: CompassIcon,
+    title: 'Deja de adivinar',
     description:
-      'Quinua, kiwicha, ají amarillo, ceviche... tu plan incluye alimentos que ya conoces y puedes conseguir fácilmente.',
+      'Sabes qué comer, cuánto y cuándo, sin estar probando cosas todo el tiempo.',
+  },
+  {
+    icon: SparkleIcon,
+    title: 'Menos inflamación',
+    description:
+      'Comes mejor, te sientes más ligero y tu digestión mejora desde los primeros días.',
   },
   {
     icon: ClockIcon,
-    title: 'Listo en 60 segundos',
+    title: 'Listo en segundos',
     description:
-      'Completa tu perfil y en menos de un minuto tendrás un plan completo de 30 días con 5 comidas diarias.',
-  },
-  {
-    icon: ShieldCheckIcon,
-    title: 'Basado en nutrición real',
-    description:
-      'Planes balanceados con macros calculados (proteínas, carbos, grasas) según tus objetivos y nivel de actividad.',
+      'Completa tu perfil y en menos de un minuto tienes tu plan completo.',
   },
   {
     icon: RefreshCwIcon,
-    title: 'Se renueva cada mes',
+    title: 'Seguimiento real',
     description:
-      'Nuevo plan cada mes automáticamente. Puedes regenerarlo cuando cambias de objetivo o quieres variedad.',
+      'Tu plan se ajusta contigo. No te quedas solo ni haciendo lo mismo siempre.',
   },
   {
-    icon: HeartIcon,
-    title: 'Adaptado a ti',
+    icon: BrainIcon,
+    title: 'Entiende lo que haces',
     description:
-      'Especificas alergias, alimentos que evitas y condiciones médicas. El plan respeta tus restricciones siempre.',
+      'No solo sigues un plan. Empiezas a entender qué le funciona a tu cuerpo.',
   },
 ];
 
