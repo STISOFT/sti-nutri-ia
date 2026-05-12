@@ -17,6 +17,7 @@ const FOOTER_LINKS = {
   legal: [
     { label: 'Términos de servicio', href: '/terminos' },
     { label: 'Privacidad', href: '/privacidad' },
+    { label: 'Libro de Reclamaciones', href: '/libro-de-reclamaciones' },
     { label: 'Contacto', href: 'mailto:hola@nutriia.pe' },
   ],
 };

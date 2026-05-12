@@ -54,6 +54,7 @@ export const ModelName = {
   Profile: 'Profile',
   Subscription: 'Subscription',
   UserHealthProfile: 'UserHealthProfile',
+  ComplaintRecord: 'ComplaintRecord',
   DietPlan: 'DietPlan'
 } as const
 
@@ -120,6 +121,37 @@ export const UserHealthProfileScalarFieldEnum = {
 } as const
 
 export type UserHealthProfileScalarFieldEnum = (typeof UserHealthProfileScalarFieldEnum)[keyof typeof UserHealthProfileScalarFieldEnum]
+
+
+export const ComplaintRecordScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  type: 'type',
+  document_type: 'document_type',
+  document_id: 'document_id',
+  first_name: 'first_name',
+  last_name: 'last_name',
+  department: 'department',
+  province: 'province',
+  district: 'district',
+  address: 'address',
+  phone: 'phone',
+  email: 'email',
+  is_minor: 'is_minor',
+  guardian_name: 'guardian_name',
+  service_name: 'service_name',
+  amount_soles: 'amount_soles',
+  detail: 'detail',
+  request: 'request',
+  status: 'status',
+  response: 'response',
+  responded_at: 'responded_at',
+  deadline_at: 'deadline_at',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type ComplaintRecordScalarFieldEnum = (typeof ComplaintRecordScalarFieldEnum)[keyof typeof ComplaintRecordScalarFieldEnum]
 
 
 export const DietPlanScalarFieldEnum = {

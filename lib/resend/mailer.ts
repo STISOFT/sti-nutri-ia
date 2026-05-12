@@ -11,6 +11,7 @@ import { PaymentConfirmationEmail } from '@/emails/PaymentConfirmationEmail';
 import { DietPlanReadyEmail } from '@/emails/DietPlanReadyEmail';
 import { SubscriptionRenewalEmail } from '@/emails/SubscriptionRenewalEmail';
 import { PasswordResetEmail } from '@/emails/PasswordResetEmail';
+import { ComplaintReceiptEmail } from '@/emails/ComplaintReceiptEmail';
 
 // Dirección de envío — configurable por variable de entorno
 const FROM = process.env.RESEND_FROM_EMAIL ?? 'KODA <hola@nutriia.pe>';
@@ -59,6 +60,29 @@ interface PasswordResetEmailParams {
   to: string;
   fullName: string;
   resetUrl: string;
+}
+
+interface ComplaintEmailParams {
+  code: string;
+  type: 'queja' | 'reclamo';
+  document_type: string;
+  document_id: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone: string;
+  department: string;
+  province: string;
+  district: string;
+  address: string;
+  is_minor: boolean;
+  guardian_name?: string | null;
+  service_name?: string | null;
+  amount_soles?: number | null;
+  detail: string;
+  request: string;
+  created_at: Date;
+  deadline_at: Date;
 }
 
 // ── Funciones de envío ────────────────────────────────────────
@@ -196,4 +220,72 @@ export async function sendPasswordResetEmail({
     subject: 'Recupera el acceso a tu cuenta KODA',
     html,
   });
+}
+
+/**
+ * Libro de Reclamaciones (INDECOPI):
+ * envía copia al consumidor + notificación al admin.
+ * Se dispara desde POST /api/complaints.
+ *
+ * COMPLAINTS_ADMIN_EMAIL define el destinatario interno; si no está
+ * configurado, cae a RESEND_FROM_EMAIL.
+ */
+export async function sendComplaintEmails(params: ComplaintEmailParams): Promise<void> {
+  const resend = getResend();
+  const adminTo =
+    process.env.COMPLAINTS_ADMIN_EMAIL ?? process.env.RESEND_FROM_EMAIL ?? FROM;
+
+  const formattedCreated = formatPeruDate(params.created_at);
+  const formattedDeadline = formatPeruDate(params.deadline_at);
+
+  const consumerHtml = await render(
+    ComplaintReceiptEmail({
+      ...params,
+      created_at: formattedCreated,
+      deadline_at: formattedDeadline,
+      audience: 'consumer',
+    })
+  );
+  const adminHtml = await render(
+    ComplaintReceiptEmail({
+      ...params,
+      created_at: formattedCreated,
+      deadline_at: formattedDeadline,
+      audience: 'admin',
+    })
+  );
+
+  const consumerSubject =
+    params.type === 'reclamo'
+      ? `Recibimos tu reclamo · ${params.code} — KODA`
+      : `Recibimos tu queja · ${params.code} — KODA`;
+
+  const adminSubject = `Nuevo ${params.type} en el Libro de Reclamaciones · ${params.code}`;
+
+  await Promise.all([
+    resend.emails.send({
+      from: FROM,
+      to: params.email,
+      subject: consumerSubject,
+      html: consumerHtml,
+    }),
+    resend.emails.send({
+      from: FROM,
+      to: adminTo,
+      replyTo: params.email,
+      subject: adminSubject,
+      html: adminHtml,
+    }),
+  ]);
+}
+
+function formatPeruDate(date: Date): string {
+  return new Intl.DateTimeFormat('es-PE', {
+    timeZone: 'America/Lima',
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(date);
 }

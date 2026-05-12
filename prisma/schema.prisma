@@ -66,6 +66,49 @@ model UserHealthProfile {
   @@map("user_health_profiles")
 }
 
+// ── complaint_records (Libro de Reclamaciones — INDECOPI) ─────
+// Registro público de quejas y reclamos exigido por la
+// Ley N° 29571 (Código de Protección y Defensa del Consumidor).
+// Acceso público (sin auth) y conservación mínima 2 años.
+model ComplaintRecord {
+  id            String   @id @default(cuid())
+  // Código correlativo visible para el consumidor (ej: LR-2026-0001)
+  code          String   @unique
+  // 'queja' (atención) | 'reclamo' (producto/servicio)
+  type          String
+  // Datos del consumidor
+  document_type String   @default("DNI") // DNI | CE | PASAPORTE
+  document_id   String
+  first_name    String
+  last_name     String
+  department    String
+  province      String
+  district      String
+  address       String
+  phone         String
+  email         String
+  is_minor      Boolean  @default(false)
+  guardian_name String?
+  // Detalle del reclamo / queja
+  service_name  String? // identificación del bien o servicio (ej: "Plan CORE")
+  amount_soles  Float? // monto reclamado (opcional)
+  detail        String // descripción del reclamo o queja
+  request       String // pedido concreto del consumidor
+  // Estado y respuesta
+  status        String   @default("pending") // pending | in_review | answered | closed
+  response      String?
+  responded_at  DateTime?
+  // Plazo legal (30 días calendario desde created_at)
+  deadline_at   DateTime
+  // Auditoría
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+
+  @@index([status])
+  @@index([created_at])
+  @@map("complaint_records")
+}
+
 // ── diet_plans ────────────────────────────────────────────────
 model DietPlan {
   id               String   @id @default(cuid())
