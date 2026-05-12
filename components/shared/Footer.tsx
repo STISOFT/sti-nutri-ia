@@ -1,6 +1,9 @@
 import Link from 'next/link';
-import { LeafIcon } from 'lucide-react';
+import { LeafIcon, BookOpenIcon } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
+
+type FooterLink = { label: string; href: string; icon?: LucideIcon };
 
 const FOOTER_LINKS = {
   producto: [
@@ -17,8 +20,13 @@ const FOOTER_LINKS = {
   legal: [
     { label: 'Términos de servicio', href: '/terminos' },
     { label: 'Privacidad', href: '/privacidad' },
+    {
+      label: 'Libro de Reclamaciones',
+      href: '/libro-de-reclamaciones',
+      icon: BookOpenIcon,
+    },
     { label: 'Contacto', href: 'mailto:hola@nutriia.pe' },
-  ],
+  ] satisfies FooterLink[],
 };
 
 export function Footer() {
@@ -80,12 +88,13 @@ export function Footer() {
           <div>
             <h4 className="mb-4 text-sm font-semibold text-foreground">Legal</h4>
             <ul className="flex flex-col gap-2.5">
-              {FOOTER_LINKS.legal.map(({ label, href }) => (
+              {FOOTER_LINKS.legal.map(({ label, href, icon: Icon }) => (
                 <li key={href}>
                   <Link
                     href={href}
-                    className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                    className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
                   >
+                    {Icon && <Icon className="size-4" aria-hidden />}
                     {label}
                   </Link>
                 </li>

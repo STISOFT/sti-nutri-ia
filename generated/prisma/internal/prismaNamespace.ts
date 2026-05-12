@@ -387,6 +387,7 @@ export const ModelName = {
   Profile: 'Profile',
   Subscription: 'Subscription',
   UserHealthProfile: 'UserHealthProfile',
+  ComplaintRecord: 'ComplaintRecord',
   DietPlan: 'DietPlan'
 } as const
 
@@ -403,7 +404,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "profile" | "subscription" | "userHealthProfile" | "dietPlan"
+    modelProps: "profile" | "subscription" | "userHealthProfile" | "complaintRecord" | "dietPlan"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -629,6 +630,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ComplaintRecord: {
+      payload: Prisma.$ComplaintRecordPayload<ExtArgs>
+      fields: Prisma.ComplaintRecordFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ComplaintRecordFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ComplaintRecordPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ComplaintRecordFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ComplaintRecordPayload>
+        }
+        findFirst: {
+          args: Prisma.ComplaintRecordFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ComplaintRecordPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ComplaintRecordFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ComplaintRecordPayload>
+        }
+        findMany: {
+          args: Prisma.ComplaintRecordFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ComplaintRecordPayload>[]
+        }
+        create: {
+          args: Prisma.ComplaintRecordCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ComplaintRecordPayload>
+        }
+        createMany: {
+          args: Prisma.ComplaintRecordCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ComplaintRecordCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ComplaintRecordPayload>[]
+        }
+        delete: {
+          args: Prisma.ComplaintRecordDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ComplaintRecordPayload>
+        }
+        update: {
+          args: Prisma.ComplaintRecordUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ComplaintRecordPayload>
+        }
+        deleteMany: {
+          args: Prisma.ComplaintRecordDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ComplaintRecordUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ComplaintRecordUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ComplaintRecordPayload>[]
+        }
+        upsert: {
+          args: Prisma.ComplaintRecordUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ComplaintRecordPayload>
+        }
+        aggregate: {
+          args: Prisma.ComplaintRecordAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateComplaintRecord>
+        }
+        groupBy: {
+          args: Prisma.ComplaintRecordGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ComplaintRecordGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ComplaintRecordCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ComplaintRecordCountAggregateOutputType> | number
+        }
+      }
+    }
     DietPlan: {
       payload: Prisma.$DietPlanPayload<ExtArgs>
       fields: Prisma.DietPlanFieldRefs
@@ -791,6 +866,37 @@ export const UserHealthProfileScalarFieldEnum = {
 export type UserHealthProfileScalarFieldEnum = (typeof UserHealthProfileScalarFieldEnum)[keyof typeof UserHealthProfileScalarFieldEnum]
 
 
+export const ComplaintRecordScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  type: 'type',
+  document_type: 'document_type',
+  document_id: 'document_id',
+  first_name: 'first_name',
+  last_name: 'last_name',
+  department: 'department',
+  province: 'province',
+  district: 'district',
+  address: 'address',
+  phone: 'phone',
+  email: 'email',
+  is_minor: 'is_minor',
+  guardian_name: 'guardian_name',
+  service_name: 'service_name',
+  amount_soles: 'amount_soles',
+  detail: 'detail',
+  request: 'request',
+  status: 'status',
+  response: 'response',
+  responded_at: 'responded_at',
+  deadline_at: 'deadline_at',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type ComplaintRecordScalarFieldEnum = (typeof ComplaintRecordScalarFieldEnum)[keyof typeof ComplaintRecordScalarFieldEnum]
+
+
 export const DietPlanScalarFieldEnum = {
   id: 'id',
   user_id: 'user_id',
@@ -911,6 +1017,13 @@ export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMode
 
 
 /**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
  * Reference to a field of type 'Json'
  */
 export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
@@ -921,13 +1034,6 @@ export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'J
  * Reference to a field of type 'QueryMode'
  */
 export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
-    
-
-
-/**
- * Reference to a field of type 'Boolean'
- */
-export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 /**
@@ -1043,6 +1149,7 @@ export type GlobalOmitConfig = {
   profile?: Prisma.ProfileOmit
   subscription?: Prisma.SubscriptionOmit
   userHealthProfile?: Prisma.UserHealthProfileOmit
+  complaintRecord?: Prisma.ComplaintRecordOmit
   dietPlan?: Prisma.DietPlanOmit
 }
 

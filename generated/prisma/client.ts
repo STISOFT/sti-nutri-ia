@@ -57,6 +57,11 @@ export type Subscription = Prisma.SubscriptionModel
  */
 export type UserHealthProfile = Prisma.UserHealthProfileModel
 /**
+ * Model ComplaintRecord
+ * 
+ */
+export type ComplaintRecord = Prisma.ComplaintRecordModel
+/**
  * Model DietPlan
  * 
  */

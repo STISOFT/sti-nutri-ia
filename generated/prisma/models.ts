@@ -11,5 +11,6 @@
 export type * from './models/Profile'
 export type * from './models/Subscription'
 export type * from './models/UserHealthProfile'
+export type * from './models/ComplaintRecord'
 export type * from './models/DietPlan'
 export type * from './commonInputTypes'
