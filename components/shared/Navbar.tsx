@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { LeafIcon, MenuIcon, LayoutDashboardIcon, LogOutIcon } from 'lucide-react';
+import { MenuIcon, LayoutDashboardIcon, LogOutIcon } from 'lucide-react';
+import { KodaLogo } from '@/components/shared/KodaLogo';
 import { createBrowserClient } from '@supabase/ssr';
 import { toast } from 'sonner';
 import { Button, buttonVariants } from '@/components/ui/button';
@@ -70,9 +71,7 @@ export function Navbar({ initialIsLoggedIn = false }: NavbarProps) {
       <div className="container mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 font-display font-bold text-foreground">
-          <div className="flex size-7 items-center justify-center rounded-md bg-primary">
-            <LeafIcon className="size-4 text-primary-foreground" />
-          </div>
+          <KodaLogo size={28} priority />
           <span className="text-lg">KODA</span>
         </Link>
 
@@ -132,9 +131,7 @@ export function Navbar({ initialIsLoggedIn = false }: NavbarProps) {
             <SheetContent side="right">
               <SheetHeader>
                 <SheetTitle className="flex items-center gap-2">
-                  <div className="flex size-6 items-center justify-center rounded-md bg-primary">
-                    <LeafIcon className="size-3.5 text-primary-foreground" />
-                  </div>
+                  <KodaLogo size={24} />
                   KODA
                 </SheetTitle>
               </SheetHeader>

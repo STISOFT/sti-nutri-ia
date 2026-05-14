@@ -8,10 +8,10 @@ import {
   HistoryIcon,
   UserIcon,
   CreditCardIcon,
-  LeafIcon,
   LogOutIcon,
   MenuIcon,
 } from 'lucide-react';
+import { KodaLogo } from '@/components/shared/KodaLogo';
 import { createBrowserClient } from '@supabase/ssr';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
@@ -52,9 +52,7 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
           className="flex items-center gap-2 font-bold text-foreground"
           onClick={onNavigate}
         >
-          <div className="flex size-7 items-center justify-center rounded-md bg-primary">
-            <LeafIcon className="size-4 text-primary-foreground" />
-          </div>
+          <KodaLogo size={28} priority />
           <span className="text-base">KODA</span>
         </Link>
       </div>

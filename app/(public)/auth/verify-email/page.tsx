@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { LeafIcon, MailCheckIcon } from 'lucide-react';
+import { MailCheckIcon } from 'lucide-react';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { KodaLogo } from '@/components/shared/KodaLogo';
 
 export const metadata: Metadata = {
   title: 'Verifica tu correo — KODA',
@@ -20,9 +21,7 @@ export default async function VerifyEmailPage({ searchParams }: Props) {
     <div className="flex min-h-screen flex-col items-center justify-center bg-background px-4 py-12">
       {/* Logo */}
       <Link href="/" className="mb-8 flex items-center gap-2 font-bold text-foreground">
-        <div className="flex size-8 items-center justify-center rounded-md bg-primary">
-          <LeafIcon className="size-4 text-primary-foreground" />
-        </div>
+        <KodaLogo size={32} priority />
         <span className="text-xl">KODA</span>
       </Link>
 

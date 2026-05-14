@@ -6,6 +6,7 @@ import {
   Heading,
   Hr,
   Html,
+  Img,
   Preview,
   Section,
   Text,
@@ -17,6 +18,7 @@ interface SubscriptionRenewalEmailProps {
   renewalDate: string; // ej: '26 de mayo de 2026'
   amountSoles: number;
   manageUrl: string;
+  logoUrl: string;
 }
 
 const PRIMARY = '#16a34a';
@@ -30,6 +32,7 @@ export function SubscriptionRenewalEmail({
   renewalDate,
   amountSoles,
   manageUrl,
+  logoUrl,
 }: SubscriptionRenewalEmailProps) {
   const firstName = fullName.split(' ')[0];
 
@@ -41,7 +44,7 @@ export function SubscriptionRenewalEmail({
         <Container style={container}>
           {/* Logo */}
           <Section style={logoSection}>
-            <Text style={logoText}>🌿 KODA</Text>
+            <Img src={logoUrl} width="40" height="40" alt="KODA" style={logoImg} />
           </Section>
 
           {/* Encabezado */}
@@ -122,11 +125,9 @@ const logoSection: React.CSSProperties = {
   padding: '20px 32px',
 };
 
-const logoText: React.CSSProperties = {
-  color: '#ffffff',
-  fontSize: '22px',
-  fontWeight: '700',
-  margin: 0,
+const logoImg: React.CSSProperties = {
+  borderRadius: '8px',
+  display: 'block',
 };
 
 const section: React.CSSProperties = {

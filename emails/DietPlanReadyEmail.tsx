@@ -6,6 +6,7 @@ import {
   Heading,
   Hr,
   Html,
+  Img,
   Preview,
   Row,
   Column,
@@ -21,6 +22,7 @@ interface DietPlanReadyEmailProps {
   fatG: number;
   monthYear: string; // ej: 'Abril 2026'
   planUrl: string;
+  logoUrl: string;
 }
 
 const PRIMARY = '#16a34a';
@@ -40,6 +42,7 @@ export function DietPlanReadyEmail({
   fatG,
   monthYear,
   planUrl,
+  logoUrl,
 }: DietPlanReadyEmailProps) {
   const firstName = fullName.split(' ')[0];
 
@@ -51,7 +54,7 @@ export function DietPlanReadyEmail({
         <Container style={container}>
           {/* Logo */}
           <Section style={logoSection}>
-            <Text style={logoText}>🌿 KODA</Text>
+            <Img src={logoUrl} width="40" height="40" alt="KODA" style={logoImg} />
           </Section>
 
           {/* Encabezado */}
@@ -160,11 +163,9 @@ const logoSection: React.CSSProperties = {
   padding: '20px 32px',
 };
 
-const logoText: React.CSSProperties = {
-  color: '#ffffff',
-  fontSize: '22px',
-  fontWeight: '700',
-  margin: 0,
+const logoImg: React.CSSProperties = {
+  borderRadius: '8px',
+  display: 'block',
 };
 
 const section: React.CSSProperties = {

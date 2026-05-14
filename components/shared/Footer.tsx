@@ -1,7 +1,8 @@
 import Link from 'next/link';
-import { LeafIcon, BookOpenIcon } from 'lucide-react';
+import { BookOpenIcon } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
+import { KodaLogo } from '@/components/shared/KodaLogo';
 
 type FooterLink = { label: string; href: string; icon?: LucideIcon };
 
@@ -37,9 +38,7 @@ export function Footer() {
           {/* Brand */}
           <div className="flex flex-col gap-4">
             <Link href="/" className="flex items-center gap-2 font-display font-bold text-foreground">
-              <div className="flex size-7 items-center justify-center rounded-md bg-primary">
-                <LeafIcon className="size-4 text-primary-foreground" />
-              </div>
+              <KodaLogo size={28} />
               <span>KODA</span>
             </Link>
             <p className="text-sm text-muted-foreground">

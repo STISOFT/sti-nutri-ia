@@ -6,6 +6,7 @@ import {
   Heading,
   Hr,
   Html,
+  Img,
   Preview,
   Section,
   Text,
@@ -14,13 +15,14 @@ import {
 interface WelcomeEmailProps {
   fullName: string;
   plansUrl: string;
+  logoUrl: string;
 }
 
 const PRIMARY = '#16a34a';
 const MUTED = '#64748b';
 const BORDER = '#e2e8f0';
 
-export function WelcomeEmail({ fullName, plansUrl }: WelcomeEmailProps) {
+export function WelcomeEmail({ fullName, plansUrl, logoUrl }: WelcomeEmailProps) {
   const firstName = fullName.split(' ')[0];
 
   return (
@@ -31,7 +33,7 @@ export function WelcomeEmail({ fullName, plansUrl }: WelcomeEmailProps) {
         <Container style={container}>
           {/* Logo */}
           <Section style={logoSection}>
-            <Text style={logoText}>🌿 KODA</Text>
+            <Img src={logoUrl} width="40" height="40" alt="KODA" style={logoImg} />
           </Section>
 
           {/* Encabezado */}
@@ -130,11 +132,9 @@ const logoSection: React.CSSProperties = {
   padding: '20px 32px',
 };
 
-const logoText: React.CSSProperties = {
-  color: '#ffffff',
-  fontSize: '22px',
-  fontWeight: '700',
-  margin: 0,
+const logoImg: React.CSSProperties = {
+  borderRadius: '8px',
+  display: 'block',
 };
 
 const section: React.CSSProperties = {

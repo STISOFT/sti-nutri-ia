@@ -16,6 +16,7 @@ import { ComplaintReceiptEmail } from '@/emails/ComplaintReceiptEmail';
 // Dirección de envío — configurable por variable de entorno
 const FROM = process.env.RESEND_FROM_EMAIL ?? 'KODA <hola@nutriia.pe>';
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://nutriia.pe';
+const LOGO_URL = `${BASE_URL}/logo-koda.png`;
 
 function getResend(): Resend {
   const apiKey = process.env.RESEND_API_KEY;
@@ -94,7 +95,7 @@ interface ComplaintEmailParams {
 export async function sendWelcomeEmail({ to, fullName }: WelcomeEmailParams): Promise<void> {
   const resend = getResend();
   const html = await render(
-    WelcomeEmail({ fullName, plansUrl: `${BASE_URL}/planes` })
+    WelcomeEmail({ fullName, plansUrl: `${BASE_URL}/planes`, logoUrl: LOGO_URL })
   );
 
   await resend.emails.send({
@@ -124,6 +125,7 @@ export async function sendPaymentConfirmationEmail({
       amountSoles,
       chargeId,
       profileUrl: `${BASE_URL}/onboarding`,
+      logoUrl: LOGO_URL,
     })
   );
 
@@ -158,6 +160,7 @@ export async function sendDietPlanReadyEmail({
       fatG,
       monthYear,
       planUrl: `${BASE_URL}/mi-plan`,
+      logoUrl: LOGO_URL,
     })
   );
 
@@ -188,6 +191,7 @@ export async function sendRenewalReminderEmail({
       renewalDate,
       amountSoles,
       manageUrl: `${BASE_URL}/suscripcion`,
+      logoUrl: LOGO_URL,
     })
   );
 
@@ -211,7 +215,7 @@ export async function sendPasswordResetEmail({
 }: PasswordResetEmailParams): Promise<void> {
   const resend = getResend();
   const html = await render(
-    PasswordResetEmail({ fullName, resetUrl })
+    PasswordResetEmail({ fullName, resetUrl, logoUrl: LOGO_URL })
   );
 
   await resend.emails.send({
@@ -244,6 +248,7 @@ export async function sendComplaintEmails(params: ComplaintEmailParams): Promise
       created_at: formattedCreated,
       deadline_at: formattedDeadline,
       audience: 'consumer',
+      logoUrl: LOGO_URL,
     })
   );
   const adminHtml = await render(
@@ -252,6 +257,7 @@ export async function sendComplaintEmails(params: ComplaintEmailParams): Promise
       created_at: formattedCreated,
       deadline_at: formattedDeadline,
       audience: 'admin',
+      logoUrl: LOGO_URL,
     })
   );
 

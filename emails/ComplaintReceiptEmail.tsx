@@ -5,6 +5,7 @@ import {
   Heading,
   Hr,
   Html,
+  Img,
   Preview,
   Section,
   Text,
@@ -32,6 +33,7 @@ interface ComplaintReceiptEmailProps {
   created_at: string;
   deadline_at: string;
   audience: 'consumer' | 'admin';
+  logoUrl: string;
 }
 
 const PRIMARY = '#16a34a';
@@ -61,6 +63,7 @@ export function ComplaintReceiptEmail(props: ComplaintReceiptEmailProps) {
     created_at,
     deadline_at,
     audience,
+    logoUrl,
   } = props;
 
   const isAdmin = audience === 'admin';
@@ -78,7 +81,8 @@ export function ComplaintReceiptEmail(props: ComplaintReceiptEmailProps) {
       <Body style={body}>
         <Container style={container}>
           <Section style={logoSection}>
-            <Text style={logoText}>🌿 KODA · Libro de Reclamaciones</Text>
+            <Img src={logoUrl} width="40" height="40" alt="KODA" style={logoImg} />
+            <Text style={logoSubtitle}>Libro de Reclamaciones</Text>
           </Section>
 
           <Section style={section}>
@@ -176,11 +180,18 @@ const logoSection: React.CSSProperties = {
   padding: '20px 32px',
 };
 
-const logoText: React.CSSProperties = {
+const logoImg: React.CSSProperties = {
+  borderRadius: '8px',
+  display: 'block',
+};
+
+const logoSubtitle: React.CSSProperties = {
   color: '#ffffff',
-  fontSize: '18px',
-  fontWeight: '700',
-  margin: 0,
+  fontSize: '13px',
+  fontWeight: '600',
+  letterSpacing: '0.5px',
+  margin: '8px 0 0',
+  textTransform: 'uppercase',
 };
 
 const section: React.CSSProperties = { padding: '24px 32px' };

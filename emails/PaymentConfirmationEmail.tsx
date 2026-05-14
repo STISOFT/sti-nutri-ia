@@ -6,6 +6,7 @@ import {
   Heading,
   Hr,
   Html,
+  Img,
   Preview,
   Row,
   Column,
@@ -18,6 +19,7 @@ interface PaymentConfirmationEmailProps {
   planName: string;
   amountSoles: number;
   chargeId: string;
+  logoUrl: string;
   profileUrl: string;
 }
 
@@ -31,6 +33,7 @@ export function PaymentConfirmationEmail({
   amountSoles,
   chargeId,
   profileUrl,
+  logoUrl,
 }: PaymentConfirmationEmailProps) {
   const firstName = fullName.split(' ')[0];
   const fecha = new Date().toLocaleDateString('es-PE', {
@@ -47,7 +50,7 @@ export function PaymentConfirmationEmail({
         <Container style={container}>
           {/* Logo */}
           <Section style={logoSection}>
-            <Text style={logoText}>🌿 KODA</Text>
+            <Img src={logoUrl} width="40" height="40" alt="KODA" style={logoImg} />
           </Section>
 
           {/* Encabezado */}
@@ -138,11 +141,9 @@ const logoSection: React.CSSProperties = {
   padding: '20px 32px',
 };
 
-const logoText: React.CSSProperties = {
-  color: '#ffffff',
-  fontSize: '22px',
-  fontWeight: '700',
-  margin: 0,
+const logoImg: React.CSSProperties = {
+  borderRadius: '8px',
+  display: 'block',
 };
 
 const section: React.CSSProperties = {
