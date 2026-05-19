@@ -21,6 +21,7 @@ const FOOTER_LINKS = {
   legal: [
     { label: 'Términos de servicio', href: '/terminos' },
     { label: 'Privacidad', href: '/privacidad' },
+    { label: 'Cambios y devoluciones', href: '/cambios-y-devoluciones' },
     {
       label: 'Libro de Reclamaciones',
       href: '/libro-de-reclamaciones',
@@ -44,6 +45,23 @@ export function Footer() {
             <p className="text-sm text-muted-foreground">
               Planes de alimentación personalizados con IA para el mercado peruano.
             </p>
+            <div className="flex flex-col gap-1 text-xs text-muted-foreground">
+              <span>3BMARKETPLACE S.A.C.</span>
+              <span>RUC 20613499572</span>
+              <span>Jr. García Villón 199, Cercado de Lima</span>
+              <a
+                href="tel:+51932421460"
+                className="transition-colors hover:text-foreground"
+              >
+                Telf. 932 421 460
+              </a>
+              <a
+                href="mailto:hola@nutriia.pe"
+                className="transition-colors hover:text-foreground"
+              >
+                hola@nutriia.pe
+              </a>
+            </div>
             <p className="text-xs text-muted-foreground">
               Hecho con ❤️ en Perú 🇵🇪
             </p>
@@ -106,7 +124,8 @@ export function Footer() {
 
         <div className="flex flex-col items-center justify-between gap-4 text-center sm:flex-row">
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} KODA. Todos los derechos reservados.
+            © {new Date().getFullYear()} 3BMARKETPLACE S.A.C. · KODA. Todos los
+            derechos reservados.
           </p>
           <p className="text-xs text-muted-foreground">
             KODA no reemplaza el consejo médico profesional.
