@@ -19,7 +19,8 @@ export function Pricing() {
             Planes simples, sin sorpresas
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-            Cancela cuando quieras. Sin contratos. Sin cobros ocultos.
+            Servicio de suscripción mensual. Cancela cuando quieras. Sin
+            contratos. Sin cobros ocultos.
           </p>
         </div>
 

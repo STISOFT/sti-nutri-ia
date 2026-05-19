@@ -54,8 +54,9 @@ export default async function PlanesPage() {
             Elige tu plan
           </h1>
           <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-            Cancela cuando quieras. Sin contratos. Sin cobros ocultos.
-            Pago seguro con Visa y Mastercard peruanas.
+            KODA es un servicio de suscripción mensual. Cancela cuando quieras.
+            Sin contratos. Sin cobros ocultos. Pago seguro con Visa y Mastercard
+            peruanas.
           </p>
         </div>
 
