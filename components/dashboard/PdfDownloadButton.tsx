@@ -28,7 +28,7 @@ export function PdfDownloadButton({ planData, planId }: PdfDownloadButtonProps) 
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `nutriia-plan-${planId}.pdf`;
+      a.download = `koda-plan-${planId}.pdf`;
       a.click();
       URL.revokeObjectURL(url);
     } catch (err) {

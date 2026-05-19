@@ -68,8 +68,8 @@ export default function TerminosPage() {
           <h2 className="mb-2 font-semibold text-foreground">7. Contacto</h2>
           <p>
             Para consultas sobre estos términos, escríbenos a{' '}
-            <a href="mailto:hola@nutriia.pe" className="text-primary underline hover:opacity-80">
-              hola@nutriia.pe
+            <a href="mailto:contacto@koda-ia.com" className="text-primary underline hover:opacity-80">
+              contacto@koda-ia.com
             </a>
             .
           </p>

@@ -82,7 +82,7 @@ export function PasswordResetEmail({ fullName, resetUrl, logoUrl }: PasswordRese
           <Hr style={hr} />
           <Section style={footer}>
             <Text style={footerText}>
-              ¿Problemas? Escríbenos a soporte@nutriia.pe
+              ¿Problemas? Escríbenos a soporte@koda-ia.com
             </Text>
             <Text style={footerText}>© 2026 KODA · Lima, Perú</Text>
           </Section>

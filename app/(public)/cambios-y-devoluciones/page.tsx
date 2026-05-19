@@ -82,10 +82,10 @@ export default function CambiosYDevolucionesPage() {
           <p>
             Para solicitar una devolución, escríbenos a{' '}
             <a
-              href="mailto:hola@nutriia.pe"
+              href="mailto:contacto@koda-ia.com"
               className="text-primary hover:underline"
             >
-              hola@nutriia.pe
+              contacto@koda-ia.com
             </a>{' '}
             indicando el correo de tu cuenta, la fecha del cobro y el motivo. De
             forma alternativa, puedes registrar tu solicitud en nuestro{' '}
@@ -140,10 +140,10 @@ export default function CambiosYDevolucionesPage() {
             Consumidor (Ley N° 29571). Para cualquier consulta o reclamo puedes
             contactarnos a{' '}
             <a
-              href="mailto:hola@nutriia.pe"
+              href="mailto:contacto@koda-ia.com"
               className="text-primary hover:underline"
             >
-              hola@nutriia.pe
+              contacto@koda-ia.com
             </a>{' '}
             o a través del{' '}
             <Link
