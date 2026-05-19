@@ -45,7 +45,8 @@ export default function LibroDeReclamacionesPage() {
         <ComplaintForm />
 
         <p className="mt-6 text-center text-xs text-muted-foreground">
-          KODA · RUC pendiente · Lima, Perú
+          3BMARKETPLACE S.A.C. · RUC 20613499572 · Jr. García Villón 199,
+          Cercado de Lima, Perú
         </p>
       </div>
     </div>
