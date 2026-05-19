@@ -27,7 +27,7 @@ const FOOTER_LINKS = {
       href: '/libro-de-reclamaciones',
       icon: BookOpenIcon,
     },
-    { label: 'Contacto', href: 'mailto:hola@nutriia.pe' },
+    { label: 'Contacto', href: 'mailto:contacto@koda-ia.com' },
   ] satisfies FooterLink[],
 };
 
@@ -56,10 +56,10 @@ export function Footer() {
                 Telf. 932 421 460
               </a>
               <a
-                href="mailto:hola@nutriia.pe"
+                href="mailto:contacto@koda-ia.com"
                 className="transition-colors hover:text-foreground"
               >
-                hola@nutriia.pe
+                contacto@koda-ia.com
               </a>
             </div>
             <p className="text-xs text-muted-foreground">

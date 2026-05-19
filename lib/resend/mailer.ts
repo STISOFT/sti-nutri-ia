@@ -14,8 +14,8 @@ import { PasswordResetEmail } from '@/emails/PasswordResetEmail';
 import { ComplaintReceiptEmail } from '@/emails/ComplaintReceiptEmail';
 
 // Dirección de envío — configurable por variable de entorno
-const FROM = process.env.RESEND_FROM_EMAIL ?? 'KODA <hola@nutriia.pe>';
-const BASE_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://nutriia.pe';
+const FROM = process.env.RESEND_FROM_EMAIL ?? 'KODA <contacto@koda-ia.com>';
+const BASE_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://koda-ia.com';
 const LOGO_URL = `${BASE_URL}/logo-koda.png`;
 
 function getResend(): Resend {

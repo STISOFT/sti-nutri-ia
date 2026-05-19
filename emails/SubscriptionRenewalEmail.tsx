@@ -94,7 +94,7 @@ export function SubscriptionRenewalEmail({
           <Hr style={hr} />
           <Section style={footer}>
             <Text style={footerText}>
-              ¿Necesitas ayuda? Escríbenos a soporte@nutriia.pe
+              ¿Necesitas ayuda? Escríbenos a soporte@koda-ia.com
             </Text>
             <Text style={footerText}>© 2026 KODA · Lima, Perú</Text>
           </Section>

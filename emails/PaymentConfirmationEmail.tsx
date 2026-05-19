@@ -110,7 +110,7 @@ export function PaymentConfirmationEmail({
           <Hr style={hr} />
           <Section style={footer}>
             <Text style={footerText}>
-              ¿Problemas con tu pago? Escríbenos a soporte@nutriia.pe
+              ¿Problemas con tu pago? Escríbenos a soporte@koda-ia.com
             </Text>
             <Text style={footerText}>© 2026 KODA · Lima, Perú</Text>
           </Section>

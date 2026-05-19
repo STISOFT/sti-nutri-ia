@@ -61,8 +61,8 @@ export default function PrivacidadPage() {
           <p>
             Tienes derecho a acceder, rectificar o eliminar tus datos personales en cualquier
             momento. Para ejercer estos derechos, contáctanos en{' '}
-            <a href="mailto:hola@nutriia.pe" className="text-primary underline hover:opacity-80">
-              hola@nutriia.pe
+            <a href="mailto:contacto@koda-ia.com" className="text-primary underline hover:opacity-80">
+              contacto@koda-ia.com
             </a>
             .
           </p>
@@ -80,8 +80,8 @@ export default function PrivacidadPage() {
           <h2 className="mb-2 font-semibold text-foreground">8. Contacto</h2>
           <p>
             Para consultas sobre privacidad, escríbenos a{' '}
-            <a href="mailto:hola@nutriia.pe" className="text-primary underline hover:opacity-80">
-              hola@nutriia.pe
+            <a href="mailto:contacto@koda-ia.com" className="text-primary underline hover:opacity-80">
+              contacto@koda-ia.com
             </a>
             .
           </p>
