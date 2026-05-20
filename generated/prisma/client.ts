@@ -66,3 +66,8 @@ export type ComplaintRecord = Prisma.ComplaintRecordModel
  * 
  */
 export type DietPlan = Prisma.DietPlanModel
+/**
+ * Model ClientAssessment
+ * 
+ */
+export type ClientAssessment = Prisma.ClientAssessmentModel

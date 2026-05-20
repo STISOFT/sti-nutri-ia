@@ -193,6 +193,7 @@ export type ProfileWhereInput = {
   subscriptions?: Prisma.SubscriptionListRelationFilter
   health_profile?: Prisma.XOR<Prisma.UserHealthProfileNullableScalarRelationFilter, Prisma.UserHealthProfileWhereInput> | null
   diet_plans?: Prisma.DietPlanListRelationFilter
+  client_assessment?: Prisma.XOR<Prisma.ClientAssessmentNullableScalarRelationFilter, Prisma.ClientAssessmentWhereInput> | null
 }
 
 export type ProfileOrderByWithRelationInput = {
@@ -205,6 +206,7 @@ export type ProfileOrderByWithRelationInput = {
   subscriptions?: Prisma.SubscriptionOrderByRelationAggregateInput
   health_profile?: Prisma.UserHealthProfileOrderByWithRelationInput
   diet_plans?: Prisma.DietPlanOrderByRelationAggregateInput
+  client_assessment?: Prisma.ClientAssessmentOrderByWithRelationInput
 }
 
 export type ProfileWhereUniqueInput = Prisma.AtLeast<{
@@ -220,6 +222,7 @@ export type ProfileWhereUniqueInput = Prisma.AtLeast<{
   subscriptions?: Prisma.SubscriptionListRelationFilter
   health_profile?: Prisma.XOR<Prisma.UserHealthProfileNullableScalarRelationFilter, Prisma.UserHealthProfileWhereInput> | null
   diet_plans?: Prisma.DietPlanListRelationFilter
+  client_assessment?: Prisma.XOR<Prisma.ClientAssessmentNullableScalarRelationFilter, Prisma.ClientAssessmentWhereInput> | null
 }, "id" | "email">
 
 export type ProfileOrderByWithAggregationInput = {
@@ -256,6 +259,7 @@ export type ProfileCreateInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutProfileInput
   health_profile?: Prisma.UserHealthProfileCreateNestedOneWithoutProfileInput
   diet_plans?: Prisma.DietPlanCreateNestedManyWithoutProfileInput
+  client_assessment?: Prisma.ClientAssessmentCreateNestedOneWithoutProfileInput
 }
 
 export type ProfileUncheckedCreateInput = {
@@ -268,6 +272,7 @@ export type ProfileUncheckedCreateInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutProfileInput
   health_profile?: Prisma.UserHealthProfileUncheckedCreateNestedOneWithoutProfileInput
   diet_plans?: Prisma.DietPlanUncheckedCreateNestedManyWithoutProfileInput
+  client_assessment?: Prisma.ClientAssessmentUncheckedCreateNestedOneWithoutProfileInput
 }
 
 export type ProfileUpdateInput = {
@@ -280,6 +285,7 @@ export type ProfileUpdateInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutProfileNestedInput
   health_profile?: Prisma.UserHealthProfileUpdateOneWithoutProfileNestedInput
   diet_plans?: Prisma.DietPlanUpdateManyWithoutProfileNestedInput
+  client_assessment?: Prisma.ClientAssessmentUpdateOneWithoutProfileNestedInput
 }
 
 export type ProfileUncheckedUpdateInput = {
@@ -292,6 +298,7 @@ export type ProfileUncheckedUpdateInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutProfileNestedInput
   health_profile?: Prisma.UserHealthProfileUncheckedUpdateOneWithoutProfileNestedInput
   diet_plans?: Prisma.DietPlanUncheckedUpdateManyWithoutProfileNestedInput
+  client_assessment?: Prisma.ClientAssessmentUncheckedUpdateOneWithoutProfileNestedInput
 }
 
 export type ProfileCreateManyInput = {
@@ -407,6 +414,20 @@ export type ProfileUpdateOneRequiredWithoutDiet_plansNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ProfileUpdateToOneWithWhereWithoutDiet_plansInput, Prisma.ProfileUpdateWithoutDiet_plansInput>, Prisma.ProfileUncheckedUpdateWithoutDiet_plansInput>
 }
 
+export type ProfileCreateNestedOneWithoutClient_assessmentInput = {
+  create?: Prisma.XOR<Prisma.ProfileCreateWithoutClient_assessmentInput, Prisma.ProfileUncheckedCreateWithoutClient_assessmentInput>
+  connectOrCreate?: Prisma.ProfileCreateOrConnectWithoutClient_assessmentInput
+  connect?: Prisma.ProfileWhereUniqueInput
+}
+
+export type ProfileUpdateOneRequiredWithoutClient_assessmentNestedInput = {
+  create?: Prisma.XOR<Prisma.ProfileCreateWithoutClient_assessmentInput, Prisma.ProfileUncheckedCreateWithoutClient_assessmentInput>
+  connectOrCreate?: Prisma.ProfileCreateOrConnectWithoutClient_assessmentInput
+  upsert?: Prisma.ProfileUpsertWithoutClient_assessmentInput
+  connect?: Prisma.ProfileWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProfileUpdateToOneWithWhereWithoutClient_assessmentInput, Prisma.ProfileUpdateWithoutClient_assessmentInput>, Prisma.ProfileUncheckedUpdateWithoutClient_assessmentInput>
+}
+
 export type ProfileCreateWithoutSubscriptionsInput = {
   id: string
   full_name?: string | null
@@ -416,6 +437,7 @@ export type ProfileCreateWithoutSubscriptionsInput = {
   updated_at?: Date | string
   health_profile?: Prisma.UserHealthProfileCreateNestedOneWithoutProfileInput
   diet_plans?: Prisma.DietPlanCreateNestedManyWithoutProfileInput
+  client_assessment?: Prisma.ClientAssessmentCreateNestedOneWithoutProfileInput
 }
 
 export type ProfileUncheckedCreateWithoutSubscriptionsInput = {
@@ -427,6 +449,7 @@ export type ProfileUncheckedCreateWithoutSubscriptionsInput = {
   updated_at?: Date | string
   health_profile?: Prisma.UserHealthProfileUncheckedCreateNestedOneWithoutProfileInput
   diet_plans?: Prisma.DietPlanUncheckedCreateNestedManyWithoutProfileInput
+  client_assessment?: Prisma.ClientAssessmentUncheckedCreateNestedOneWithoutProfileInput
 }
 
 export type ProfileCreateOrConnectWithoutSubscriptionsInput = {
@@ -454,6 +477,7 @@ export type ProfileUpdateWithoutSubscriptionsInput = {
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   health_profile?: Prisma.UserHealthProfileUpdateOneWithoutProfileNestedInput
   diet_plans?: Prisma.DietPlanUpdateManyWithoutProfileNestedInput
+  client_assessment?: Prisma.ClientAssessmentUpdateOneWithoutProfileNestedInput
 }
 
 export type ProfileUncheckedUpdateWithoutSubscriptionsInput = {
@@ -465,6 +489,7 @@ export type ProfileUncheckedUpdateWithoutSubscriptionsInput = {
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   health_profile?: Prisma.UserHealthProfileUncheckedUpdateOneWithoutProfileNestedInput
   diet_plans?: Prisma.DietPlanUncheckedUpdateManyWithoutProfileNestedInput
+  client_assessment?: Prisma.ClientAssessmentUncheckedUpdateOneWithoutProfileNestedInput
 }
 
 export type ProfileCreateWithoutHealth_profileInput = {
@@ -476,6 +501,7 @@ export type ProfileCreateWithoutHealth_profileInput = {
   updated_at?: Date | string
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutProfileInput
   diet_plans?: Prisma.DietPlanCreateNestedManyWithoutProfileInput
+  client_assessment?: Prisma.ClientAssessmentCreateNestedOneWithoutProfileInput
 }
 
 export type ProfileUncheckedCreateWithoutHealth_profileInput = {
@@ -487,6 +513,7 @@ export type ProfileUncheckedCreateWithoutHealth_profileInput = {
   updated_at?: Date | string
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutProfileInput
   diet_plans?: Prisma.DietPlanUncheckedCreateNestedManyWithoutProfileInput
+  client_assessment?: Prisma.ClientAssessmentUncheckedCreateNestedOneWithoutProfileInput
 }
 
 export type ProfileCreateOrConnectWithoutHealth_profileInput = {
@@ -514,6 +541,7 @@ export type ProfileUpdateWithoutHealth_profileInput = {
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutProfileNestedInput
   diet_plans?: Prisma.DietPlanUpdateManyWithoutProfileNestedInput
+  client_assessment?: Prisma.ClientAssessmentUpdateOneWithoutProfileNestedInput
 }
 
 export type ProfileUncheckedUpdateWithoutHealth_profileInput = {
@@ -525,6 +553,7 @@ export type ProfileUncheckedUpdateWithoutHealth_profileInput = {
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutProfileNestedInput
   diet_plans?: Prisma.DietPlanUncheckedUpdateManyWithoutProfileNestedInput
+  client_assessment?: Prisma.ClientAssessmentUncheckedUpdateOneWithoutProfileNestedInput
 }
 
 export type ProfileCreateWithoutDiet_plansInput = {
@@ -536,6 +565,7 @@ export type ProfileCreateWithoutDiet_plansInput = {
   updated_at?: Date | string
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutProfileInput
   health_profile?: Prisma.UserHealthProfileCreateNestedOneWithoutProfileInput
+  client_assessment?: Prisma.ClientAssessmentCreateNestedOneWithoutProfileInput
 }
 
 export type ProfileUncheckedCreateWithoutDiet_plansInput = {
@@ -547,6 +577,7 @@ export type ProfileUncheckedCreateWithoutDiet_plansInput = {
   updated_at?: Date | string
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutProfileInput
   health_profile?: Prisma.UserHealthProfileUncheckedCreateNestedOneWithoutProfileInput
+  client_assessment?: Prisma.ClientAssessmentUncheckedCreateNestedOneWithoutProfileInput
 }
 
 export type ProfileCreateOrConnectWithoutDiet_plansInput = {
@@ -574,6 +605,7 @@ export type ProfileUpdateWithoutDiet_plansInput = {
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutProfileNestedInput
   health_profile?: Prisma.UserHealthProfileUpdateOneWithoutProfileNestedInput
+  client_assessment?: Prisma.ClientAssessmentUpdateOneWithoutProfileNestedInput
 }
 
 export type ProfileUncheckedUpdateWithoutDiet_plansInput = {
@@ -585,6 +617,71 @@ export type ProfileUncheckedUpdateWithoutDiet_plansInput = {
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutProfileNestedInput
   health_profile?: Prisma.UserHealthProfileUncheckedUpdateOneWithoutProfileNestedInput
+  client_assessment?: Prisma.ClientAssessmentUncheckedUpdateOneWithoutProfileNestedInput
+}
+
+export type ProfileCreateWithoutClient_assessmentInput = {
+  id: string
+  full_name?: string | null
+  email: string
+  avatar_url?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutProfileInput
+  health_profile?: Prisma.UserHealthProfileCreateNestedOneWithoutProfileInput
+  diet_plans?: Prisma.DietPlanCreateNestedManyWithoutProfileInput
+}
+
+export type ProfileUncheckedCreateWithoutClient_assessmentInput = {
+  id: string
+  full_name?: string | null
+  email: string
+  avatar_url?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutProfileInput
+  health_profile?: Prisma.UserHealthProfileUncheckedCreateNestedOneWithoutProfileInput
+  diet_plans?: Prisma.DietPlanUncheckedCreateNestedManyWithoutProfileInput
+}
+
+export type ProfileCreateOrConnectWithoutClient_assessmentInput = {
+  where: Prisma.ProfileWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProfileCreateWithoutClient_assessmentInput, Prisma.ProfileUncheckedCreateWithoutClient_assessmentInput>
+}
+
+export type ProfileUpsertWithoutClient_assessmentInput = {
+  update: Prisma.XOR<Prisma.ProfileUpdateWithoutClient_assessmentInput, Prisma.ProfileUncheckedUpdateWithoutClient_assessmentInput>
+  create: Prisma.XOR<Prisma.ProfileCreateWithoutClient_assessmentInput, Prisma.ProfileUncheckedCreateWithoutClient_assessmentInput>
+  where?: Prisma.ProfileWhereInput
+}
+
+export type ProfileUpdateToOneWithWhereWithoutClient_assessmentInput = {
+  where?: Prisma.ProfileWhereInput
+  data: Prisma.XOR<Prisma.ProfileUpdateWithoutClient_assessmentInput, Prisma.ProfileUncheckedUpdateWithoutClient_assessmentInput>
+}
+
+export type ProfileUpdateWithoutClient_assessmentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  full_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutProfileNestedInput
+  health_profile?: Prisma.UserHealthProfileUpdateOneWithoutProfileNestedInput
+  diet_plans?: Prisma.DietPlanUpdateManyWithoutProfileNestedInput
+}
+
+export type ProfileUncheckedUpdateWithoutClient_assessmentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  full_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutProfileNestedInput
+  health_profile?: Prisma.UserHealthProfileUncheckedUpdateOneWithoutProfileNestedInput
+  diet_plans?: Prisma.DietPlanUncheckedUpdateManyWithoutProfileNestedInput
 }
 
 
@@ -637,6 +734,7 @@ export type ProfileSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   subscriptions?: boolean | Prisma.Profile$subscriptionsArgs<ExtArgs>
   health_profile?: boolean | Prisma.Profile$health_profileArgs<ExtArgs>
   diet_plans?: boolean | Prisma.Profile$diet_plansArgs<ExtArgs>
+  client_assessment?: boolean | Prisma.Profile$client_assessmentArgs<ExtArgs>
   _count?: boolean | Prisma.ProfileCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["profile"]>
 
@@ -672,6 +770,7 @@ export type ProfileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   subscriptions?: boolean | Prisma.Profile$subscriptionsArgs<ExtArgs>
   health_profile?: boolean | Prisma.Profile$health_profileArgs<ExtArgs>
   diet_plans?: boolean | Prisma.Profile$diet_plansArgs<ExtArgs>
+  client_assessment?: boolean | Prisma.Profile$client_assessmentArgs<ExtArgs>
   _count?: boolean | Prisma.ProfileCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ProfileIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -683,6 +782,7 @@ export type $ProfilePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     subscriptions: Prisma.$SubscriptionPayload<ExtArgs>[]
     health_profile: Prisma.$UserHealthProfilePayload<ExtArgs> | null
     diet_plans: Prisma.$DietPlanPayload<ExtArgs>[]
+    client_assessment: Prisma.$ClientAssessmentPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1088,6 +1188,7 @@ export interface Prisma__ProfileClient<T, Null = never, ExtArgs extends runtime.
   subscriptions<T extends Prisma.Profile$subscriptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Profile$subscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   health_profile<T extends Prisma.Profile$health_profileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Profile$health_profileArgs<ExtArgs>>): Prisma.Prisma__UserHealthProfileClient<runtime.Types.Result.GetResult<Prisma.$UserHealthProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   diet_plans<T extends Prisma.Profile$diet_plansArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Profile$diet_plansArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DietPlanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  client_assessment<T extends Prisma.Profile$client_assessmentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Profile$client_assessmentArgs<ExtArgs>>): Prisma.Prisma__ClientAssessmentClient<runtime.Types.Result.GetResult<Prisma.$ClientAssessmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1580,6 +1681,25 @@ export type Profile$diet_plansArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.DietPlanScalarFieldEnum | Prisma.DietPlanScalarFieldEnum[]
+}
+
+/**
+ * Profile.client_assessment
+ */
+export type Profile$client_assessmentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ClientAssessment
+   */
+  select?: Prisma.ClientAssessmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ClientAssessment
+   */
+  omit?: Prisma.ClientAssessmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ClientAssessmentInclude<ExtArgs> | null
+  where?: Prisma.ClientAssessmentWhereInput
 }
 
 /**

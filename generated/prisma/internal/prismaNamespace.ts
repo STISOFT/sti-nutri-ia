@@ -388,7 +388,8 @@ export const ModelName = {
   Subscription: 'Subscription',
   UserHealthProfile: 'UserHealthProfile',
   ComplaintRecord: 'ComplaintRecord',
-  DietPlan: 'DietPlan'
+  DietPlan: 'DietPlan',
+  ClientAssessment: 'ClientAssessment'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -404,7 +405,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "profile" | "subscription" | "userHealthProfile" | "complaintRecord" | "dietPlan"
+    modelProps: "profile" | "subscription" | "userHealthProfile" | "complaintRecord" | "dietPlan" | "clientAssessment"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -778,6 +779,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ClientAssessment: {
+      payload: Prisma.$ClientAssessmentPayload<ExtArgs>
+      fields: Prisma.ClientAssessmentFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ClientAssessmentFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientAssessmentPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ClientAssessmentFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientAssessmentPayload>
+        }
+        findFirst: {
+          args: Prisma.ClientAssessmentFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientAssessmentPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ClientAssessmentFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientAssessmentPayload>
+        }
+        findMany: {
+          args: Prisma.ClientAssessmentFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientAssessmentPayload>[]
+        }
+        create: {
+          args: Prisma.ClientAssessmentCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientAssessmentPayload>
+        }
+        createMany: {
+          args: Prisma.ClientAssessmentCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ClientAssessmentCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientAssessmentPayload>[]
+        }
+        delete: {
+          args: Prisma.ClientAssessmentDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientAssessmentPayload>
+        }
+        update: {
+          args: Prisma.ClientAssessmentUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientAssessmentPayload>
+        }
+        deleteMany: {
+          args: Prisma.ClientAssessmentDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ClientAssessmentUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ClientAssessmentUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientAssessmentPayload>[]
+        }
+        upsert: {
+          args: Prisma.ClientAssessmentUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientAssessmentPayload>
+        }
+        aggregate: {
+          args: Prisma.ClientAssessmentAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateClientAssessment>
+        }
+        groupBy: {
+          args: Prisma.ClientAssessmentGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ClientAssessmentGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ClientAssessmentCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ClientAssessmentCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -912,6 +987,56 @@ export const DietPlanScalarFieldEnum = {
 } as const
 
 export type DietPlanScalarFieldEnum = (typeof DietPlanScalarFieldEnum)[keyof typeof DietPlanScalarFieldEnum]
+
+
+export const ClientAssessmentScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  q1_goal: 'q1_goal',
+  q2_body_description: 'q2_body_description',
+  q3_training_frequency: 'q3_training_frequency',
+  q4_main_difficulty: 'q4_main_difficulty',
+  q5_meals_per_day: 'q5_meals_per_day',
+  q6_inflammation_perception: 'q6_inflammation_perception',
+  age: 'age',
+  weight_kg: 'weight_kg',
+  height_cm: 'height_cm',
+  waist_cm: 'waist_cm',
+  wake_time: 'wake_time',
+  work_time: 'work_time',
+  train_time: 'train_time',
+  sleep_time: 'sleep_time',
+  q9_training_type: 'q9_training_type',
+  q10_food_quality: 'q10_food_quality',
+  q10_typical_day: 'q10_typical_day',
+  q11_digestion_symptoms: 'q11_digestion_symptoms',
+  q12_post_meal_sensation: 'q12_post_meal_sensation',
+  q13_sleep_hours: 'q13_sleep_hours',
+  q14_stress_level: 'q14_stress_level',
+  q15_food_restrictions: 'q15_food_restrictions',
+  classified_body_type: 'classified_body_type',
+  classified_activity_level: 'classified_activity_level',
+  classified_inflammation: 'classified_inflammation',
+  classified_difficulty: 'classified_difficulty',
+  classified_meal_structure: 'classified_meal_structure',
+  classified_life_structure: 'classified_life_structure',
+  classified_food_quality: 'classified_food_quality',
+  classified_digestive_alert: 'classified_digestive_alert',
+  classified_recovery: 'classified_recovery',
+  classified_abdominal_fat: 'classified_abdominal_fat',
+  calc_maintenance_kcal_min: 'calc_maintenance_kcal_min',
+  calc_maintenance_kcal_max: 'calc_maintenance_kcal_max',
+  calc_target_kcal_min: 'calc_target_kcal_min',
+  calc_target_kcal_max: 'calc_target_kcal_max',
+  calc_deficit_type: 'calc_deficit_type',
+  calc_protein_g: 'calc_protein_g',
+  calc_fats_g: 'calc_fats_g',
+  calc_carbs_g: 'calc_carbs_g',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type ClientAssessmentScalarFieldEnum = (typeof ClientAssessmentScalarFieldEnum)[keyof typeof ClientAssessmentScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1151,6 +1276,7 @@ export type GlobalOmitConfig = {
   userHealthProfile?: Prisma.UserHealthProfileOmit
   complaintRecord?: Prisma.ComplaintRecordOmit
   dietPlan?: Prisma.DietPlanOmit
+  clientAssessment?: Prisma.ClientAssessmentOmit
 }
 
 /* Types for Logging */

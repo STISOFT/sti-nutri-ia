@@ -17,9 +17,10 @@ model Profile {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  subscriptions  Subscription[]
-  health_profile UserHealthProfile?
-  diet_plans     DietPlan[]
+  subscriptions     Subscription[]
+  health_profile    UserHealthProfile?
+  diet_plans        DietPlan[]
+  client_assessment ClientAssessment?
 
   @@map("profiles")
 }
@@ -71,13 +72,13 @@ model UserHealthProfile {
 // Ley N° 29571 (Código de Protección y Defensa del Consumidor).
 // Acceso público (sin auth) y conservación mínima 2 años.
 model ComplaintRecord {
-  id            String   @id @default(cuid())
+  id            String    @id @default(cuid())
   // Código correlativo visible para el consumidor (ej: LR-2026-0001)
-  code          String   @unique
+  code          String    @unique
   // 'queja' (atención) | 'reclamo' (producto/servicio)
   type          String
   // Datos del consumidor
-  document_type String   @default("DNI") // DNI | CE | PASAPORTE
+  document_type String    @default("DNI") // DNI | CE | PASAPORTE
   document_id   String
   first_name    String
   last_name     String
@@ -87,7 +88,7 @@ model ComplaintRecord {
   address       String
   phone         String
   email         String
-  is_minor      Boolean  @default(false)
+  is_minor      Boolean   @default(false)
   guardian_name String?
   // Detalle del reclamo / queja
   service_name  String? // identificación del bien o servicio (ej: "Plan CORE")
@@ -95,14 +96,14 @@ model ComplaintRecord {
   detail        String // descripción del reclamo o queja
   request       String // pedido concreto del consumidor
   // Estado y respuesta
-  status        String   @default("pending") // pending | in_review | answered | closed
+  status        String    @default("pending") // pending | in_review | answered | closed
   response      String?
   responded_at  DateTime?
   // Plazo legal (30 días calendario desde created_at)
   deadline_at   DateTime
   // Auditoría
-  created_at    DateTime @default(now())
-  updated_at    DateTime @updatedAt
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
 
   @@index([status])
   @@index([created_at])
@@ -127,4 +128,87 @@ model DietPlan {
   subscription Subscription? @relation(fields: [subscription_id], references: [id])
 
   @@map("diet_plans")
+}
+
+// ── client_assessments (Método - Pérdida de Grasa, Bloques 3-5) ─
+// Reemplaza a UserHealthProfile en el nuevo flujo de evaluación.
+// Coexiste con UserHealthProfile durante la migración por fases.
+model ClientAssessment {
+  id      String @id @default(cuid())
+  user_id String @unique
+
+  // ─── Bloque 3 · Respuestas del formulario (15 preguntas) ────
+  // Fase 1 — Quiz rápido (Q1–Q6)
+  q1_goal                    String @default("perder_grasa") // perder_grasa (único valor permitido por ahora)
+  q2_body_description        String // delgado | acumulador_grasa | gordiflaco
+  q3_training_frequency      String // no_entreno | 1_2 | 3_4 | 5_o_mas
+  q4_main_difficulty         String // falta_tiempo | ansiedad_hambre | no_se_que_comer | falta_constancia
+  q5_meals_per_day           String // 1_2 | 3 | 4_5
+  q6_inflammation_perception String // si_constantemente | a_veces | no
+
+  // Fase 2 — Evaluación detallada (Q7–Q15)
+  // Q7 — Datos físicos
+  age       Int
+  weight_kg Float
+  height_cm Float
+  waist_cm  Float?
+
+  // Q8 — Horarios (formato HH:MM)
+  wake_time  String?
+  work_time  String?
+  train_time String?
+  sleep_time String?
+
+  // Q9 — Tipo de entrenamiento
+  q9_training_type String // pesas | cardio | ambos | ninguno
+
+  // Q10 — Alimentación actual
+  q10_food_quality String // casera | comida_rapida | mezcla
+  q10_typical_day  String? // descripción libre de un día típico
+
+  // Q11 — Síntomas digestivos (multi-select)
+  q11_digestion_symptoms String[] // gases | estrenimiento | digestion_pesada | ninguno
+
+  // Q12 — Sensación después de comer
+  q12_post_meal_sensation String // ligero | pesado | con_sueno | inflamado
+
+  // Q13 — Horas de sueño
+  q13_sleep_hours String // menos_5 | 5_6 | 7_8 | mas_8
+
+  // Q14 — Nivel de estrés
+  q14_stress_level String // bajo | medio | alto
+
+  // Q15 — Restricciones alimentarias (texto libre, corto)
+  q15_food_restrictions String?
+
+  // ─── Bloque 4 · Variables clasificadas (computadas) ─────────
+  classified_body_type       String? // delgado | acumulador_grasa | baja_masa_grasa_localizada
+  classified_activity_level  String? // sedentario | bajo | moderado | alto
+  classified_inflammation    String? // alta | moderada | baja
+  classified_difficulty      String? // copia directa de q4_main_difficulty
+  classified_meal_structure  String? // baja | media | alta
+  classified_life_structure  String? // desordenada | moderada | estructurada
+  classified_food_quality    String? // baja | media | alta
+  classified_digestive_alert String? // alta | media | baja
+  classified_recovery        String? // alta | media | baja
+  classified_abdominal_fat   String? // alta | media | baja | no_clasificada
+
+  // ─── Bloque 5 · Requerimientos calculados ───────────────────
+  calc_maintenance_kcal_min Int?
+  calc_maintenance_kcal_max Int?
+  calc_target_kcal_min      Int?
+  calc_target_kcal_max      Int?
+  calc_deficit_type         String? // conservador | moderado
+  calc_protein_g            Int?
+  calc_fats_g               Int?
+  calc_carbs_g              Int?
+
+  // ─── Auditoría ─────────────────────────────────────────────
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  profile Profile @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([created_at])
+  @@map("client_assessments")
 }
