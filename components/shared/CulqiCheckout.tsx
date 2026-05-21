@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
@@ -64,11 +64,6 @@ export function CulqiCheckout({
   const [formOpen, setFormOpen] = useState(false);
   const [processing, setProcessing] = useState(false);
   const plan = PLANS[planId];
-  // Guarda los datos del customer YA validados con zod, para que el
-  // callback window.culqi los use con certeza (en lugar de leer
-  // form.getValues(), que puede quedar desincronizado o llegar vacío
-  // si la validación del form fue bypassed por algún issue del botón).
-  const validatedCustomerRef = useRef<CustomerForm | null>(null);
 
   // ── Pre-fill nombre desde Supabase user_metadata si está ────
   const [firstFromName, lastFromName] = splitFullName(userFullName);
@@ -134,43 +129,6 @@ export function CulqiCheckout({
     [planId, router, onSuccess]
   );
 
-  // ── Callback global `window.culqi` requerido por Culqi.js v4 ─
-  // El SDK invoca window.culqi() (minúsculas) cuando termina el flujo.
-  // Si se generó token: Culqi.token.id está disponible.
-  // Si hubo error: Culqi.error tiene los detalles.
-  useEffect(() => {
-    if (IS_MOCK) return;
-    const w = window as unknown as {
-      Culqi?: {
-        token?: { id: string; object?: string };
-        error?: { user_message?: string; merchant_message?: string };
-        close?: () => void;
-      };
-      culqi?: () => void;
-    };
-    w.culqi = () => {
-      const c = w.Culqi;
-      if (c?.token?.id && c.token.object === 'token') {
-        c.close?.();
-        const data = validatedCustomerRef.current;
-        if (!data) {
-          toast.error('Faltan datos del cliente. Recarga la página.');
-          return;
-        }
-        void callSubscribeAPI(c.token.id, data);
-      } else if (c?.error) {
-        toast.error(
-          c.error.user_message ??
-            c.error.merchant_message ??
-            'No pudimos validar tu tarjeta. Verifica los datos.'
-        );
-      }
-    };
-    return () => {
-      w.culqi = undefined;
-    };
-  }, [callSubscribeAPI]);
-
   // ── Submit del form: si todo válido → abrir Culqi.js ────────
   function handleContinueToPayment(customer: CustomerForm) {
     // Doble validación defensiva: aunque react-hook-form ya valida
@@ -182,20 +140,24 @@ export function CulqiCheckout({
       return;
     }
     const validatedCustomer = parsed.data;
-    validatedCustomerRef.current = validatedCustomer;
 
     if (IS_MOCK) {
       void callSubscribeAPI('tkn_mock_dev', validatedCustomer);
       return;
     }
-    const culqi = (window as unknown as {
+    const w = window as unknown as {
       Culqi?: {
         publicKey: string;
         init: () => void;
         settings: (s: Record<string, unknown>) => void;
         open: () => void;
+        close?: () => void;
+        token?: { id: string; object?: string };
+        error?: { user_message?: string; merchant_message?: string };
       };
-    }).Culqi;
+      culqi?: () => void;
+    };
+    const culqi = w.Culqi;
 
     if (!scriptLoaded || !culqi) {
       toast.error('El sistema de pagos aún está cargando. Espera un momento.');
@@ -207,6 +169,27 @@ export function CulqiCheckout({
       toast.error('Configuración de pagos no disponible.');
       return;
     }
+
+    // Reasignamos window.culqi en CADA apertura del modal usando un
+    // closure que captura los datos validados de ESTE intento.
+    // Esto evita el problema de múltiples instancias de CulqiCheckout
+    // pisándose la asignación de window.culqi (la página renderiza
+    // un componente por plan, pero solo puede haber UN window.culqi
+    // global; el closure asegura que el que abre la modal es el que
+    // procesa el token, no el último que se montó).
+    w.culqi = () => {
+      const c = w.Culqi;
+      if (c?.token?.id && c.token.object === 'token') {
+        c.close?.();
+        void callSubscribeAPI(c.token.id, validatedCustomer);
+      } else if (c?.error) {
+        toast.error(
+          c.error.user_message ??
+            c.error.merchant_message ??
+            'No pudimos validar tu tarjeta. Verifica los datos.'
+        );
+      }
+    };
 
     culqi.publicKey = publicKey;
     culqi.init(); // v4 requiere init() antes de settings/open
