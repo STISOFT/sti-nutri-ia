@@ -23,11 +23,10 @@ import type { PlanId } from '../types/database';
 const PLAN_IDS: PlanId[] = ['inicio', 'core', 'pro'];
 
 async function fetchAllExistingPlans() {
-  // Listamos hasta 50 (suficiente para nuestros 3 planes + cualquier
-  // otro plan que ya hayas tenido en la cuenta). Si tenés más de 50
-  // sería raro pero podríamos paginar con `after`.
+  // Listamos sin params (Culqi usa su default). Si tenés más de los
+  // que devuelve por default y necesitás paginación, agregar `after`.
   console.log('  Listando planes existentes en Culqi...');
-  const resp = await listCulqiPlans({ limit: 50 });
+  const resp = await listCulqiPlans();
   if (resp.object_error) {
     throw new Error(
       `Error listando planes: ${resp.merchant_message ?? resp.user_message ?? JSON.stringify(resp)}`

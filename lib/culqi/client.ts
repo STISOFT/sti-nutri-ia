@@ -53,11 +53,17 @@ async function culqiRequest<T>(
   // Capturamos el body como texto primero para poder diagnosticar
   // respuestas no-JSON (HTML de error, body vacío en 4xx/5xx, etc.).
   const text = await res.text();
+
+  // Headers útiles para diagnóstico (request id, content-type).
+  const reqId =
+    res.headers.get('x-request-id') ?? res.headers.get('request-id') ?? '';
+  const contentType = res.headers.get('content-type') ?? '';
+
   if (!text) {
     return {
       object_error: 'http_error',
       type: String(res.status),
-      merchant_message: `Culqi devolvió ${res.status} sin body (${method} ${path})`,
+      merchant_message: `Culqi devolvió HTTP ${res.status} sin body (${method} ${url}${reqId ? ' req=' + reqId : ''} content-type=${contentType || 'none'})`,
       user_message: `Error en la integración con Culqi (HTTP ${res.status}).`,
     } as T & CulqiErrorEnvelope;
   }
@@ -67,7 +73,7 @@ async function culqiRequest<T>(
     return {
       object_error: 'parse_error',
       type: String(res.status),
-      merchant_message: `Culqi devolvió respuesta no-JSON: ${text.slice(0, 200)}`,
+      merchant_message: `Culqi devolvió respuesta no-JSON (HTTP ${res.status}, ${url}): ${text.slice(0, 200)}`,
       user_message: 'Respuesta inesperada de Culqi. Inténtalo de nuevo.',
     } as T & CulqiErrorEnvelope;
   }
@@ -211,10 +217,11 @@ export async function listCulqiPlans(
   params: { limit?: number; before?: string; after?: string } = {}
 ): Promise<CulqiPlanListResponse> {
   const query = new URLSearchParams();
-  query.set('limit', String(params.limit ?? 50));
+  if (params.limit !== undefined) query.set('limit', String(params.limit));
   if (params.before) query.set('before', params.before);
   if (params.after) query.set('after', params.after);
-  return culqiRequest<CulqiPlanListResponse>('GET', `/plans?${query.toString()}`);
+  const qs = query.toString();
+  return culqiRequest<CulqiPlanListResponse>('GET', `/plans${qs ? '?' + qs : ''}`);
 }
 
 // ────────────────────────────────────────────────────────────
