@@ -148,7 +148,7 @@ export interface CulqiCustomerResponse extends CulqiErrorEnvelope {
 export async function createCulqiCustomer(
   input: CulqiCustomerInput
 ): Promise<CulqiCustomerResponse> {
-  return culqiRequest<CulqiCustomerResponse>('POST', '/customers', input);
+  return culqiRequest<CulqiCustomerResponse>('POST', '/customers/create', input);
 }
 
 // ────────────────────────────────────────────────────────────
@@ -172,7 +172,7 @@ export interface CulqiCardResponse extends CulqiErrorEnvelope {
 export async function createCulqiCard(
   input: CulqiCardInput
 ): Promise<CulqiCardResponse> {
-  return culqiRequest<CulqiCardResponse>('POST', '/cards', input);
+  return culqiRequest<CulqiCardResponse>('POST', '/cards/create', input);
 }
 
 // ────────────────────────────────────────────────────────────
@@ -218,7 +218,7 @@ export interface CulqiPlanResponse extends CulqiErrorEnvelope {
 export async function createCulqiPlan(
   input: CulqiPlanInput
 ): Promise<CulqiPlanResponse> {
-  return culqiRequest<CulqiPlanResponse>('POST', '/recurrent/plans', input);
+  return culqiRequest<CulqiPlanResponse>('POST', '/recurrent/plans/create', input);
 }
 
 export interface CulqiPlanListResponse extends CulqiErrorEnvelope {
@@ -268,7 +268,7 @@ export async function createCulqiSubscription(
 ): Promise<CulqiSubscriptionResponse> {
   return culqiRequest<CulqiSubscriptionResponse>(
     'POST',
-    '/recurrent/subscriptions',
+    '/recurrent/subscriptions/create',
     input
   );
 }
