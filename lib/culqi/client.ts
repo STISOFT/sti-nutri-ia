@@ -259,6 +259,11 @@ export async function listCulqiPlans(
 export interface CulqiSubscriptionInput {
   card_id: string; // card_xxx
   plan_id: string; // pln_xxx
+  // Culqi exige confirmación explícita de que el usuario aceptó los
+  // términos y condiciones (requisito regulatorio peruano). Debe
+  // ser `true` — si lo enviás falso o lo omitís, te rechaza con
+  // "El campo 'tyc' es requerido".
+  tyc: boolean;
   metadata?: Record<string, string>;
 }
 

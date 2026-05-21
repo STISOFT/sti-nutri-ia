@@ -167,10 +167,15 @@ export async function POST(request: NextRequest) {
   const cardId = culqiCard.id;
 
   // ── 7. Crear Subscription ────────────────────────────────────
+  // tyc=true: el usuario acepta T&C al completar el flujo de pago.
+  // Nuestros T&C están en /legal/terminos y se referencian desde el
+  // botón "Continuar al pago" del modal. Esta aceptación es
+  // requisito regulatorio (PCI + INDECOPI) y Culqi la verifica.
   console.log(`[payments/subscribe] Creando subscription para card ${cardId}, plan ${culqiPlanId}`);
   const culqiSubscription = await createCulqiSubscription({
     card_id: cardId,
     plan_id: culqiPlanId,
+    tyc: true,
     metadata: { koda_user_id: user.id, koda_plan_id: plan_id },
   });
 
