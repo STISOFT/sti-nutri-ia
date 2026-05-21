@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
+const isDev = process.env.NODE_ENV === 'development';
+
 const nextConfig = {
   // Build standalone para imagen Docker mínima (CapRover)
   output: 'standalone',
@@ -31,8 +33,10 @@ const nextConfig = {
             key: 'Content-Security-Policy',
             value: [
               "default-src 'self'",
-              // Scripts: propio + Culqi.js + inline necesario para Next.js
-              "script-src 'self' 'unsafe-inline' https://checkout.culqi.com",
+              // Scripts: propio + Culqi.js + inline. En dev también
+              // 'unsafe-eval' porque Next.js Fast Refresh evalúa código
+              // en caliente — en producción se queda estricto.
+              `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ''} https://checkout.culqi.com`,
               // Estilos: propio + inline (necesario para Tailwind/shadcn)
               "style-src 'self' 'unsafe-inline'",
               // Imágenes: propio + data URIs + blob para PDF
