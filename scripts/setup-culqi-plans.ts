@@ -22,25 +22,34 @@ import type { PlanId } from '../types/database';
 
 const PLAN_IDS: PlanId[] = ['inicio', 'core', 'pro'];
 
-async function setupPlan(planId: PlanId): Promise<{ planId: PlanId; culqiId: string; created: boolean }> {
-  const payload = getCulqiPlanPayload(planId);
-
-  // 1. Buscar si ya existe (filtrando por nuestro metadata.koda_plan_id)
-  console.log(`\n── Plan: ${planId} (${payload.name}) ──`);
-  console.log(`  Buscando en Culqi por metadata.koda_plan_id = "${planId}"...`);
-  const existing = await listCulqiPlans({
-    metadata: { koda_plan_id: planId },
-    limit: 5,
-  });
-
-  if (existing.object_error) {
+async function fetchAllExistingPlans() {
+  // Listamos hasta 50 (suficiente para nuestros 3 planes + cualquier
+  // otro plan que ya hayas tenido en la cuenta). Si tenés más de 50
+  // sería raro pero podríamos paginar con `after`.
+  console.log('  Listando planes existentes en Culqi...');
+  const resp = await listCulqiPlans({ limit: 50 });
+  if (resp.object_error) {
     throw new Error(
-      `  ✗ Error listando planes: ${existing.user_message ?? existing.merchant_message ?? 'desconocido'}`
+      `Error listando planes: ${resp.merchant_message ?? resp.user_message ?? JSON.stringify(resp)}`
     );
   }
+  return resp.data ?? [];
+}
 
-  const found = (existing.data ?? []).find(
-    (p) => p.metadata?.koda_plan_id === planId
+async function setupPlan(
+  planId: PlanId,
+  existingPlans: Awaited<ReturnType<typeof fetchAllExistingPlans>>
+): Promise<{ planId: PlanId; culqiId: string; created: boolean }> {
+  const payload = getCulqiPlanPayload(planId);
+
+  console.log(`\n── Plan: ${planId} (${payload.name}) ──`);
+
+  // Buscar coincidencia por metadata.koda_plan_id O por short_name como
+  // fallback (por si fueron creados manualmente antes y no tienen metadata).
+  const found = existingPlans.find(
+    (p) =>
+      p.metadata?.koda_plan_id === planId ||
+      p.short_name === planId
   );
 
   if (found?.id) {
@@ -48,13 +57,12 @@ async function setupPlan(planId: PlanId): Promise<{ planId: PlanId; culqiId: str
     return { planId, culqiId: found.id, created: false };
   }
 
-  // 2. No existe: crear
   console.log(`  Creando plan en Culqi...`);
   const created = await createCulqiPlan(payload);
 
   if (created.object_error || !created.id) {
     throw new Error(
-      `  ✗ Error creando plan: ${created.user_message ?? created.merchant_message ?? JSON.stringify(created)}`
+      `Error creando plan: ${created.merchant_message ?? created.user_message ?? JSON.stringify(created)}`
     );
   }
 
@@ -74,10 +82,20 @@ async function main() {
   console.log(`Culqi Plans Setup — Ambiente: ${isLive ? 'LIVE ⚠️' : 'SANDBOX'}`);
   console.log('═══════════════════════════════════════════════════════');
 
+  // Una sola llamada GET /v2/plans, luego filtramos client-side por planId.
+  let existingPlans: Awaited<ReturnType<typeof fetchAllExistingPlans>>;
+  try {
+    existingPlans = await fetchAllExistingPlans();
+    console.log(`  Encontrados ${existingPlans.length} plan(es) en la cuenta.`);
+  } catch (err) {
+    console.error(err instanceof Error ? err.message : String(err));
+    process.exit(1);
+  }
+
   const results = [];
   for (const planId of PLAN_IDS) {
     try {
-      results.push(await setupPlan(planId));
+      results.push(await setupPlan(planId, existingPlans));
     } catch (err) {
       console.error(err instanceof Error ? err.message : String(err));
       process.exit(1);
