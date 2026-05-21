@@ -155,7 +155,10 @@ export interface CulqiCustomerResponse extends CulqiErrorEnvelope {
 export async function createCulqiCustomer(
   input: CulqiCustomerInput
 ): Promise<CulqiCustomerResponse> {
-  return culqiRequest<CulqiCustomerResponse>('POST', '/customers/create', input);
+  // Customers usa POST /v2/customers (sin /create). Solo los recursos
+  // de /recurrent/ (plans, subscriptions) llevan el sufijo /create.
+  // Confirmado en el SDK oficial Go: github.com/culqi/culqi-go.
+  return culqiRequest<CulqiCustomerResponse>('POST', '/customers', input);
 }
 
 // ────────────────────────────────────────────────────────────
@@ -179,7 +182,9 @@ export interface CulqiCardResponse extends CulqiErrorEnvelope {
 export async function createCulqiCard(
   input: CulqiCardInput
 ): Promise<CulqiCardResponse> {
-  return culqiRequest<CulqiCardResponse>('POST', '/cards/create', input);
+  // Cards usa POST /v2/cards (sin /create). Solo los recursos de
+  // /recurrent/ (plans, subscriptions) llevan el sufijo /create.
+  return culqiRequest<CulqiCardResponse>('POST', '/cards', input);
 }
 
 // ────────────────────────────────────────────────────────────
