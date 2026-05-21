@@ -158,6 +158,8 @@ export const PLANS = {
       'Recomendaciones generales',
     ],
     generations_per_month: 1,
+    // Bloque 2 del Método: básico por 7 días, sin seguimiento.
+    follow_up: 'sin_seguimiento' as const,
     highlight: false,
   },
   core: {
@@ -177,6 +179,8 @@ export const PLANS = {
       'Curso base en video para aprender calistenia',
     ],
     generations_per_month: 2,
+    // Bloque 2: intermedio con seguimiento periódico cada 2 semanas.
+    follow_up: 'quincenal' as const,
     highlight: true, // Plan recomendado
   },
   pro: {
@@ -196,6 +200,8 @@ export const PLANS = {
       'Beneficios adicionales (descuentos, entrenamientos, etc.)',
     ],
     generations_per_month: -1, // -1 = ilimitado
+    // Bloque 2: avanzado con seguimiento frecuente y ajustes constantes.
+    follow_up: 'semanal' as const,
     highlight: false,
   },
 } as const;
