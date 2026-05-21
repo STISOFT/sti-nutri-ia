@@ -4,6 +4,7 @@ import { cookies } from 'next/headers';
 import { prisma } from '@/lib/prisma/client';
 import { quizAnswersSchema } from '@/lib/validations/method';
 import { classifyProfile } from '@/lib/method/classifier';
+import { calculateRequirements } from '@/lib/method/calculator';
 import type { QuizAnswers } from '@/types/method';
 
 // POST /api/onboarding/assessment
@@ -62,6 +63,15 @@ export async function POST(request: NextRequest) {
   // persistirlas en la misma operación.
   const classified = classifyProfile(a as QuizAnswers);
 
+  // ── Bloque 5 — Requerimientos energéticos y macros ────────────
+  const requirements = calculateRequirements({
+    weight_kg: a.weight_kg,
+    body_type: classified.body_type,
+    activity_level: classified.activity_level,
+    inflammation: classified.inflammation,
+    recovery: classified.recovery,
+  });
+
   // Datos crudos del formulario (15 respuestas)
   const rawData = {
     q1_goal: a.q1_goal,
@@ -102,18 +112,16 @@ export async function POST(request: NextRequest) {
     classified_abdominal_fat: classified.abdominal_fat,
   };
 
-  // Requerimientos calculados (Bloque 5) — se resetean siempre que
-  // se re-evalúa el formulario; el cálculo real se implementará en
-  // la Fase 4 (calculator).
-  const calcReset = {
-    calc_maintenance_kcal_min: null,
-    calc_maintenance_kcal_max: null,
-    calc_target_kcal_min: null,
-    calc_target_kcal_max: null,
-    calc_deficit_type: null,
-    calc_protein_g: null,
-    calc_fats_g: null,
-    calc_carbs_g: null,
+  // Requerimientos calculados (Bloque 5)
+  const calcData = {
+    calc_maintenance_kcal_min: requirements.maintenance_kcal.min,
+    calc_maintenance_kcal_max: requirements.maintenance_kcal.max,
+    calc_target_kcal_min: requirements.target_kcal.min,
+    calc_target_kcal_max: requirements.target_kcal.max,
+    calc_deficit_type: requirements.deficit_type,
+    calc_protein_g: requirements.protein_g,
+    calc_fats_g: requirements.fats_g,
+    calc_carbs_g: requirements.carbs_g,
   };
 
   // ── Persistencia ─────────────────────────────────────────────
@@ -124,11 +132,12 @@ export async function POST(request: NextRequest) {
         user_id: user.id,
         ...rawData,
         ...classifiedData,
+        ...calcData,
       },
       update: {
         ...rawData,
         ...classifiedData,
-        ...calcReset,
+        ...calcData,
       },
       select: { id: true, created_at: true, updated_at: true },
     });
@@ -139,6 +148,7 @@ export async function POST(request: NextRequest) {
         id: record.id,
         updated_at: record.updated_at,
         classified,
+        requirements,
       },
       { status: 201 }
     );
