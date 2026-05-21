@@ -40,12 +40,24 @@ export function getCulqiPlanId(planId: PlanId): string {
  * Usado por el script de setup para crear los planes en Culqi
  * con los valores correctos.
  */
+/**
+ * Culqi valida el campo `description` y rechaza caracteres especiales
+ * como `+`. Mantenemos el subtitle original en la UI; solo lo
+ * normalizamos para el payload de Culqi.
+ */
+function sanitizeDescription(s: string): string {
+  return s
+    .replace(/\+/g, 'y') // "+" → " y "
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 export function getCulqiPlanPayload(planId: PlanId): CulqiPlanInput {
   const plan = PLANS[planId];
   return {
     name: plan.name,
     short_name: `koda_${planId}`,
-    description: plan.subtitle,
+    description: sanitizeDescription(plan.subtitle),
     amount: plan.price_cents, // céntimos PEN
     currency: 'PEN',
     // Suscripción mensual recurrente:
