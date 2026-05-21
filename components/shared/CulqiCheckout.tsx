@@ -129,18 +129,37 @@ export function CulqiCheckout({
     [planId, router, onSuccess]
   );
 
-  // ── Listener del evento de Culqi.js (cuando llega el token) ─
+  // ── Callback global `window.culqi` requerido por Culqi.js v4 ─
+  // El SDK invoca window.culqi() (minúsculas) cuando termina el flujo.
+  // Si se generó token: Culqi.token.id está disponible.
+  // Si hubo error: Culqi.error tiene los detalles.
   useEffect(() => {
     if (IS_MOCK) return;
-    function onPayment() {
-      const culqi = (window as unknown as { Culqi?: { token?: { id: string }; close?: () => void } }).Culqi;
-      if (!culqi?.token?.id) return;
-      culqi.close?.();
-      const data = form.getValues();
-      void callSubscribeAPI(culqi.token.id, data);
-    }
-    document.addEventListener('payment', onPayment);
-    return () => document.removeEventListener('payment', onPayment);
+    const w = window as unknown as {
+      Culqi?: {
+        token?: { id: string; object?: string };
+        error?: { user_message?: string; merchant_message?: string };
+        close?: () => void;
+      };
+      culqi?: () => void;
+    };
+    w.culqi = () => {
+      const c = w.Culqi;
+      if (c?.token?.id && c.token.object === 'token') {
+        c.close?.();
+        const data = form.getValues();
+        void callSubscribeAPI(c.token.id, data);
+      } else if (c?.error) {
+        toast.error(
+          c.error.user_message ??
+            c.error.merchant_message ??
+            'No pudimos validar tu tarjeta. Verifica los datos.'
+        );
+      }
+    };
+    return () => {
+      w.culqi = undefined;
+    };
   }, [callSubscribeAPI, form]);
 
   // ── Submit del form: si todo válido → abrir Culqi.js ────────
@@ -152,6 +171,7 @@ export function CulqiCheckout({
     const culqi = (window as unknown as {
       Culqi?: {
         publicKey: string;
+        init: () => void;
         settings: (s: Record<string, unknown>) => void;
         open: () => void;
       };
@@ -169,6 +189,7 @@ export function CulqiCheckout({
     }
 
     culqi.publicKey = publicKey;
+    culqi.init(); // v4 requiere init() antes de settings/open
     culqi.settings({
       title: 'KODA',
       currency: 'PEN',
