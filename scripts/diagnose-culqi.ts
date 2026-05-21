@@ -20,10 +20,22 @@ interface Probe {
 }
 
 const probes: Probe[] = [
-  { label: 'GET /v2/plans (api.culqi.com, sin params)', method: 'GET', url: 'https://api.culqi.com/v2/plans' },
-  { label: 'GET /v2/plans?limit=10 (api.culqi.com)', method: 'GET', url: 'https://api.culqi.com/v2/plans?limit=10' },
-  { label: 'GET /v2/plans (secure.culqi.com)', method: 'GET', url: 'https://secure.culqi.com/v2/plans' },
-  { label: 'GET /v2/customers (api.culqi.com, sin params)', method: 'GET', url: 'https://api.culqi.com/v2/customers' },
+  // Plans (sospechoso)
+  { label: 'POST /v2/plans (intentar crear uno)', method: 'POST', url: 'https://api.culqi.com/v2/plans', body: {
+      name: 'KODA TEST PLAN',
+      short_name: 'koda_test_diagnose',
+      description: 'Plan creado por script de diagnóstico — se puede borrar',
+      amount: 2990,
+      currency: 'PEN',
+      interval_unit_time: 3,
+      interval_count: 1,
+      limit: 0,
+      metadata: { koda_diagnostic: 'true' },
+  } },
+  { label: 'GET /v2/plans/ (con trailing slash)', method: 'GET', url: 'https://api.culqi.com/v2/plans/' },
+  // Otras features para comparar
+  { label: 'GET /v2/subscriptions (control — otra feature recurrente)', method: 'GET', url: 'https://api.culqi.com/v2/subscriptions' },
+  { label: 'GET /v2/charges (control — feature core)', method: 'GET', url: 'https://api.culqi.com/v2/charges' },
 ];
 
 async function probe(p: Probe) {

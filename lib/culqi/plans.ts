@@ -44,15 +44,20 @@ export function getCulqiPlanPayload(planId: PlanId): CulqiPlanInput {
   const plan = PLANS[planId];
   return {
     name: plan.name,
-    short_name: planId,
+    short_name: `koda_${planId}`,
     description: plan.subtitle,
     amount: plan.price_cents, // céntimos PEN
     currency: 'PEN',
-    // Suscripción mensual:
-    interval_unit_time: 3, // 1=día, 2=semana, 3=mes, 4=año (Culqi)
+    // Suscripción mensual recurrente:
+    interval_unit_time: 3, // 1=día, 2=semana, 3=mes, 4=año
     interval_count: 1,
-    // Sin límite de cobros (suscripción continua hasta cancelar):
-    limit: 0,
+    // Sin ciclos iniciales — el cobro mensual empieza desde el primer día:
+    initial_cycles: {
+      count: 0,
+      has_initial_charge: false,
+      amount: 0,
+      interval_unit_time: 1,
+    },
     metadata: {
       koda_plan_id: planId,
     },

@@ -179,6 +179,19 @@ export async function createCulqiCard(
 // PLANS
 // ────────────────────────────────────────────────────────────
 
+/**
+ * Configuración de ciclos iniciales del plan. Permite cobrar un monto
+ * distinto los primeros N ciclos (por ejemplo: 1 mes a S/0 de promo,
+ * luego sigue al precio normal). Para suscripción simple sin ciclo
+ * inicial: `{ count: 0, has_initial_charge: false, amount: 0, interval_unit_time: 1 }`.
+ */
+export interface CulqiInitialCycles {
+  count: number; // cuántos ciclos iniciales (0 = ninguno)
+  has_initial_charge: boolean; // true si los ciclos iniciales se cobran
+  amount: number; // monto del ciclo inicial en céntimos (si has_initial_charge=true)
+  interval_unit_time: 1 | 2 | 3 | 4; // unidad de tiempo del ciclo inicial
+}
+
 export interface CulqiPlanInput {
   name: string;
   short_name?: string;
@@ -187,7 +200,7 @@ export interface CulqiPlanInput {
   currency: 'PEN';
   interval_unit_time: 1 | 2 | 3 | 4; // 1=día 2=semana 3=mes 4=año
   interval_count: number;
-  limit: number; // 0 = sin límite
+  initial_cycles: CulqiInitialCycles;
   metadata?: Record<string, string>;
 }
 
