@@ -3,6 +3,8 @@ import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { prisma } from '@/lib/prisma/client';
 import { quizAnswersSchema } from '@/lib/validations/method';
+import { classifyProfile } from '@/lib/method/classifier';
+import type { QuizAnswers } from '@/types/method';
 
 // POST /api/onboarding/assessment
 // Recibe las 15 respuestas del Bloque 3 y las guarda en client_assessments.
@@ -55,83 +57,89 @@ export async function POST(request: NextRequest) {
   // Normaliza horarios vacíos a null (en el form se enviaban como '')
   const norm = (v: string | undefined | null) => (v && v.trim() ? v : null);
 
+  // ── Bloque 4 — Clasificación determinística ───────────────────
+  // Calculamos las variables clasificadas ANTES del upsert para
+  // persistirlas en la misma operación.
+  const classified = classifyProfile(a as QuizAnswers);
+
+  // Datos crudos del formulario (15 respuestas)
+  const rawData = {
+    q1_goal: a.q1_goal,
+    q2_body_description: a.q2_body_description,
+    q3_training_frequency: a.q3_training_frequency,
+    q4_main_difficulty: a.q4_main_difficulty,
+    q5_meals_per_day: a.q5_meals_per_day,
+    q6_inflammation_perception: a.q6_inflammation_perception,
+    age: a.age,
+    weight_kg: a.weight_kg,
+    height_cm: a.height_cm,
+    waist_cm: a.waist_cm ?? null,
+    wake_time: norm(a.wake_time),
+    work_time: norm(a.work_time),
+    train_time: norm(a.train_time),
+    sleep_time: norm(a.sleep_time),
+    q9_training_type: a.q9_training_type,
+    q10_food_quality: a.q10_food_quality,
+    q10_typical_day: norm(a.q10_typical_day),
+    q11_digestion_symptoms: a.q11_digestion_symptoms,
+    q12_post_meal_sensation: a.q12_post_meal_sensation,
+    q13_sleep_hours: a.q13_sleep_hours,
+    q14_stress_level: a.q14_stress_level,
+    q15_food_restrictions: norm(a.q15_food_restrictions),
+  };
+
+  // Variables clasificadas (Bloque 4)
+  const classifiedData = {
+    classified_body_type: classified.body_type,
+    classified_activity_level: classified.activity_level,
+    classified_inflammation: classified.inflammation,
+    classified_difficulty: classified.difficulty,
+    classified_meal_structure: classified.meal_structure,
+    classified_life_structure: classified.life_structure,
+    classified_food_quality: classified.food_quality,
+    classified_digestive_alert: classified.digestive_alert,
+    classified_recovery: classified.recovery,
+    classified_abdominal_fat: classified.abdominal_fat,
+  };
+
+  // Requerimientos calculados (Bloque 5) — se resetean siempre que
+  // se re-evalúa el formulario; el cálculo real se implementará en
+  // la Fase 4 (calculator).
+  const calcReset = {
+    calc_maintenance_kcal_min: null,
+    calc_maintenance_kcal_max: null,
+    calc_target_kcal_min: null,
+    calc_target_kcal_max: null,
+    calc_deficit_type: null,
+    calc_protein_g: null,
+    calc_fats_g: null,
+    calc_carbs_g: null,
+  };
+
   // ── Persistencia ─────────────────────────────────────────────
   try {
     const record = await prisma.clientAssessment.upsert({
       where: { user_id: user.id },
       create: {
         user_id: user.id,
-        q1_goal: a.q1_goal,
-        q2_body_description: a.q2_body_description,
-        q3_training_frequency: a.q3_training_frequency,
-        q4_main_difficulty: a.q4_main_difficulty,
-        q5_meals_per_day: a.q5_meals_per_day,
-        q6_inflammation_perception: a.q6_inflammation_perception,
-        age: a.age,
-        weight_kg: a.weight_kg,
-        height_cm: a.height_cm,
-        waist_cm: a.waist_cm ?? null,
-        wake_time: norm(a.wake_time),
-        work_time: norm(a.work_time),
-        train_time: norm(a.train_time),
-        sleep_time: norm(a.sleep_time),
-        q9_training_type: a.q9_training_type,
-        q10_food_quality: a.q10_food_quality,
-        q10_typical_day: norm(a.q10_typical_day),
-        q11_digestion_symptoms: a.q11_digestion_symptoms,
-        q12_post_meal_sensation: a.q12_post_meal_sensation,
-        q13_sleep_hours: a.q13_sleep_hours,
-        q14_stress_level: a.q14_stress_level,
-        q15_food_restrictions: norm(a.q15_food_restrictions),
+        ...rawData,
+        ...classifiedData,
       },
       update: {
-        q1_goal: a.q1_goal,
-        q2_body_description: a.q2_body_description,
-        q3_training_frequency: a.q3_training_frequency,
-        q4_main_difficulty: a.q4_main_difficulty,
-        q5_meals_per_day: a.q5_meals_per_day,
-        q6_inflammation_perception: a.q6_inflammation_perception,
-        age: a.age,
-        weight_kg: a.weight_kg,
-        height_cm: a.height_cm,
-        waist_cm: a.waist_cm ?? null,
-        wake_time: norm(a.wake_time),
-        work_time: norm(a.work_time),
-        train_time: norm(a.train_time),
-        sleep_time: norm(a.sleep_time),
-        q9_training_type: a.q9_training_type,
-        q10_food_quality: a.q10_food_quality,
-        q10_typical_day: norm(a.q10_typical_day),
-        q11_digestion_symptoms: a.q11_digestion_symptoms,
-        q12_post_meal_sensation: a.q12_post_meal_sensation,
-        q13_sleep_hours: a.q13_sleep_hours,
-        q14_stress_level: a.q14_stress_level,
-        q15_food_restrictions: norm(a.q15_food_restrictions),
-        // Resetear los campos clasificados/calculados — se vuelven a generar en Fase 3-5
-        classified_body_type: null,
-        classified_activity_level: null,
-        classified_inflammation: null,
-        classified_difficulty: null,
-        classified_meal_structure: null,
-        classified_life_structure: null,
-        classified_food_quality: null,
-        classified_digestive_alert: null,
-        classified_recovery: null,
-        classified_abdominal_fat: null,
-        calc_maintenance_kcal_min: null,
-        calc_maintenance_kcal_max: null,
-        calc_target_kcal_min: null,
-        calc_target_kcal_max: null,
-        calc_deficit_type: null,
-        calc_protein_g: null,
-        calc_fats_g: null,
-        calc_carbs_g: null,
+        ...rawData,
+        ...classifiedData,
+        ...calcReset,
       },
       select: { id: true, created_at: true, updated_at: true },
     });
 
     return NextResponse.json(
-      { ok: true, id: record.id, updated_at: record.updated_at },
+      {
+        ok: true,
+        id: record.id,
+        updated_at: record.updated_at,
+        classified,
+      },
       { status: 201 }
     );
   } catch (err) {
