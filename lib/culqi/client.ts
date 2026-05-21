@@ -29,8 +29,15 @@ export interface CulqiErrorEnvelope {
 // ────────────────────────────────────────────────────────────
 
 function getSecretKey(): string {
-  const key = process.env.CULQI_PRIVATE_KEY;
-  if (!key) throw new Error('CULQI_PRIVATE_KEY no configurado');
+  // Aceptamos ambos nombres para compatibilidad con la convención
+  // anterior del .env (CULQI_SECRET_KEY) y la nueva (CULQI_PRIVATE_KEY,
+  // que es el nombre oficial en la doc de Culqi).
+  const key = process.env.CULQI_PRIVATE_KEY ?? process.env.CULQI_SECRET_KEY;
+  if (!key) {
+    throw new Error(
+      'CULQI_PRIVATE_KEY (o CULQI_SECRET_KEY) no configurado en el entorno'
+    );
+  }
   return key;
 }
 
