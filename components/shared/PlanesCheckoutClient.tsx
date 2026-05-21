@@ -6,6 +6,7 @@ import { type PlanId } from '@/types/database';
 interface PlanesCheckoutClientProps {
   planId: PlanId;
   userEmail: string;
+  userFullName?: string;
   highlight: boolean;
   planName: string;
 }
@@ -17,6 +18,7 @@ interface PlanesCheckoutClientProps {
 export function PlanesCheckoutClient({
   planId,
   userEmail,
+  userFullName,
   highlight,
   planName,
 }: PlanesCheckoutClientProps) {
@@ -24,6 +26,7 @@ export function PlanesCheckoutClient({
     <CulqiCheckout
       planId={planId}
       userEmail={userEmail}
+      userFullName={userFullName}
       buttonLabel={`Empezar con ${planName}`}
       buttonVariant={highlight ? 'default' : 'outline'}
       buttonClassName="mt-auto w-full"

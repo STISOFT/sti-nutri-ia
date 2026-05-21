@@ -20,6 +20,7 @@ export default async function PlanesPage() {
   // Verificar si el usuario está autenticado
   const cookieStore = await cookies();
   let userEmail: string | null = null;
+  let userFullName: string | undefined;
 
   if (
     process.env.NEXT_PUBLIC_SUPABASE_URL &&
@@ -41,6 +42,7 @@ export default async function PlanesPage() {
     } = await supabase.auth.getUser();
 
     userEmail = user?.email ?? null;
+    userFullName = user?.user_metadata?.full_name as string | undefined;
   }
 
   const plans = Object.values(PLANS);
@@ -115,6 +117,7 @@ export default async function PlanesPage() {
                   <PlanesCheckoutClient
                     planId={plan.id}
                     userEmail={userEmail}
+                    userFullName={userFullName}
                     highlight={plan.highlight}
                     planName={plan.name}
                   />

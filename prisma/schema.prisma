@@ -26,22 +26,30 @@ model Profile {
 
 // ── subscriptions ─────────────────────────────────────────────
 model Subscription {
-  id                   String    @id @default(cuid())
-  user_id              String
-  plan_id              String
-  status               String    @default("pending")
-  culqi_order_id       String?
-  culqi_charge_id      String?
-  amount_cents         Int
-  currency             String    @default("PEN")
-  current_period_start DateTime?
-  current_period_end   DateTime?
-  created_at           DateTime  @default(now())
-  updated_at           DateTime  @updatedAt
+  id                    String    @id @default(cuid())
+  user_id               String
+  plan_id               String
+  status                String    @default("pending") // pending | active | inactive | cancelled | past_due
+  // ─── Culqi (cargo único, legacy) ───────────────────────────
+  culqi_order_id        String?
+  culqi_charge_id       String?
+  // ─── Culqi (suscripciones recurrentes) ─────────────────────
+  culqi_customer_id     String?
+  culqi_card_id         String?
+  culqi_subscription_id String?   @unique
+  // ─── Datos comunes ─────────────────────────────────────────
+  amount_cents          Int
+  currency              String    @default("PEN")
+  current_period_start  DateTime?
+  current_period_end    DateTime?
+  cancelled_at          DateTime?
+  created_at            DateTime  @default(now())
+  updated_at            DateTime  @updatedAt
 
   profile    Profile    @relation(fields: [user_id], references: [id], onDelete: Cascade)
   diet_plans DietPlan[]
 
+  @@index([culqi_customer_id])
   @@map("subscriptions")
 }
 
@@ -71,13 +79,13 @@ model UserHealthProfile {
 // Ley N° 29571 (Código de Protección y Defensa del Consumidor).
 // Acceso público (sin auth) y conservación mínima 2 años.
 model ComplaintRecord {
-  id            String   @id @default(cuid())
+  id            String    @id @default(cuid())
   // Código correlativo visible para el consumidor (ej: LR-2026-0001)
-  code          String   @unique
+  code          String    @unique
   // 'queja' (atención) | 'reclamo' (producto/servicio)
   type          String
   // Datos del consumidor
-  document_type String   @default("DNI") // DNI | CE | PASAPORTE
+  document_type String    @default("DNI") // DNI | CE | PASAPORTE
   document_id   String
   first_name    String
   last_name     String
@@ -87,7 +95,7 @@ model ComplaintRecord {
   address       String
   phone         String
   email         String
-  is_minor      Boolean  @default(false)
+  is_minor      Boolean   @default(false)
   guardian_name String?
   // Detalle del reclamo / queja
   service_name  String? // identificación del bien o servicio (ej: "Plan CORE")
@@ -95,14 +103,14 @@ model ComplaintRecord {
   detail        String // descripción del reclamo o queja
   request       String // pedido concreto del consumidor
   // Estado y respuesta
-  status        String   @default("pending") // pending | in_review | answered | closed
+  status        String    @default("pending") // pending | in_review | answered | closed
   response      String?
   responded_at  DateTime?
   // Plazo legal (30 días calendario desde created_at)
   deadline_at   DateTime
   // Auditoría
-  created_at    DateTime @default(now())
-  updated_at    DateTime @updatedAt
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
 
   @@index([status])
   @@index([created_at])
