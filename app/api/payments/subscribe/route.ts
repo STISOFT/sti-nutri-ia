@@ -213,6 +213,22 @@ export async function POST(request: NextRequest) {
     ? new Date(culqiSubscription.current_period_end)
     : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // fallback 30 días
 
+  // Asegurar que el profile exista (FK subscriptions.user_id →
+  // profiles.id). Normalmente se crea en el flujo de registro,
+  // pero para users antiguos o si el trigger Supabase no corrió,
+  // upsert acá garantiza que la inserción de subscription no falle.
+  await prisma.profile.upsert({
+    where: { id: user.id },
+    create: {
+      id: user.id,
+      email: user.email ?? customer.email,
+      full_name:
+        (user.user_metadata?.full_name as string | undefined) ??
+        `${customer.first_name} ${customer.last_name}`.trim(),
+    },
+    update: {},
+  });
+
   const subscription = await prisma.subscription.create({
     data: {
       user_id: user.id,
