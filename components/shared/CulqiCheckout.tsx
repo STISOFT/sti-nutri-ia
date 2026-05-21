@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
@@ -64,6 +64,11 @@ export function CulqiCheckout({
   const [formOpen, setFormOpen] = useState(false);
   const [processing, setProcessing] = useState(false);
   const plan = PLANS[planId];
+  // Guarda los datos del customer YA validados con zod, para que el
+  // callback window.culqi los use con certeza (en lugar de leer
+  // form.getValues(), que puede quedar desincronizado o llegar vacío
+  // si la validación del form fue bypassed por algún issue del botón).
+  const validatedCustomerRef = useRef<CustomerForm | null>(null);
 
   // ── Pre-fill nombre desde Supabase user_metadata si está ────
   const [firstFromName, lastFromName] = splitFullName(userFullName);
@@ -147,7 +152,11 @@ export function CulqiCheckout({
       const c = w.Culqi;
       if (c?.token?.id && c.token.object === 'token') {
         c.close?.();
-        const data = form.getValues();
+        const data = validatedCustomerRef.current;
+        if (!data) {
+          toast.error('Faltan datos del cliente. Recarga la página.');
+          return;
+        }
         void callSubscribeAPI(c.token.id, data);
       } else if (c?.error) {
         toast.error(
@@ -160,12 +169,23 @@ export function CulqiCheckout({
     return () => {
       w.culqi = undefined;
     };
-  }, [callSubscribeAPI, form]);
+  }, [callSubscribeAPI]);
 
   // ── Submit del form: si todo válido → abrir Culqi.js ────────
   function handleContinueToPayment(customer: CustomerForm) {
+    // Doble validación defensiva: aunque react-hook-form ya valida
+    // con zodResolver, re-validamos acá por si el botón submit
+    // bypaseó el flujo (problema conocido con base-ui Button).
+    const parsed = subscribePaymentSchema.shape.customer.safeParse(customer);
+    if (!parsed.success) {
+      toast.error(parsed.error.issues[0]?.message ?? 'Datos inválidos');
+      return;
+    }
+    const validatedCustomer = parsed.data;
+    validatedCustomerRef.current = validatedCustomer;
+
     if (IS_MOCK) {
-      void callSubscribeAPI('tkn_mock_dev', customer);
+      void callSubscribeAPI('tkn_mock_dev', validatedCustomer);
       return;
     }
     const culqi = (window as unknown as {
@@ -296,7 +316,18 @@ export function CulqiCheckout({
                 <LockIcon className="mr-1 inline size-3" />
                 Pago seguro vía Culqi
               </span>
-              <Button type="submit" disabled={processing} className="gap-2">
+              {/*
+                Usamos <button> HTML nativo (no el wrapper de base-ui)
+                para asegurarnos de que type="submit" dispare el
+                onSubmit del <form> y se ejecute la validación de
+                react-hook-form / zod. El Button de base-ui no propaga
+                bien type="submit" en todos los casos.
+              */}
+              <button
+                type="submit"
+                disabled={processing}
+                className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-3 py-2 text-sm font-medium text-primary-foreground transition-all hover:bg-primary/80 disabled:pointer-events-none disabled:opacity-50"
+              >
                 {processing ? (
                   <>
                     <Loader2Icon className="size-4 animate-spin" />
@@ -308,7 +339,7 @@ export function CulqiCheckout({
                     <LockIcon className="size-4" />
                   </>
                 )}
-              </Button>
+              </button>
             </div>
           </form>
         </DialogContent>
