@@ -3,10 +3,10 @@ import { cookies } from 'next/headers';
 import { createServerClient } from '@supabase/ssr';
 import type { Metadata } from 'next';
 import { prisma } from '@/lib/prisma/client';
-import { OnboardingWizard } from '@/components/dashboard/OnboardingWizard';
+import { AssessmentForm } from '@/components/onboarding/AssessmentForm';
 
 export const metadata: Metadata = {
-  title: 'Configura tu perfil — KODA',
+  title: 'Evaluación inicial — KODA',
   robots: { index: false },
 };
 
@@ -47,14 +47,19 @@ export default async function OnboardingPage() {
     redirect('/planes');
   }
 
-  // ── Verificar si ya completó el perfil ────────────────────────
-  const healthProfile = await prisma.userHealthProfile.findUnique({
+  // ── Verificar si ya completó la evaluación ────────────────────
+  const assessment = await prisma.clientAssessment.findUnique({
     where: { user_id: user.id },
+    select: { id: true },
   });
 
-  if (healthProfile) {
+  if (assessment) {
     redirect('/dashboard');
   }
 
-  return <OnboardingWizard />;
+  return (
+    <main className="min-h-screen bg-background">
+      <AssessmentForm />
+    </main>
+  );
 }
