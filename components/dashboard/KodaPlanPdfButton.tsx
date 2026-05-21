@@ -24,11 +24,11 @@ export function KodaPlanPdfButton({ plan, planId, userName }: KodaPlanPdfButtonP
     try {
       const { pdf } = await import('@react-pdf/renderer');
       const { KodaPlanPdfDocument } = await import('./KodaPlanPdfDocument');
-      const { createElement } = await import('react');
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // react-pdf espera un Document JSX directo; los tipos no se
+      // alinean con un ReactElement plano, pero es la forma oficial.
       const blob = await pdf(
-        createElement(KodaPlanPdfDocument, { plan, userName }) as any
+        <KodaPlanPdfDocument plan={plan} userName={userName} />
       ).toBlob();
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');

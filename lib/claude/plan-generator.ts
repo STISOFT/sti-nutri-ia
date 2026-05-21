@@ -111,7 +111,7 @@ export async function generateKodaPlan(
   let plan: KodaPlan;
   try {
     plan = JSON.parse(textBlock.text) as KodaPlan;
-  } catch (err) {
+  } catch {
     console.error('[plan-generator] JSON inválido:', textBlock.text.slice(0, 500));
     throw new Error('Claude devolvió JSON no parseable');
   }
