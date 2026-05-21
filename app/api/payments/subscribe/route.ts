@@ -115,7 +115,18 @@ export async function POST(request: NextRequest) {
       {
         error:
           culqiCustomer.user_message ??
+          culqiCustomer.merchant_message ??
           'No pudimos registrar tus datos de cliente. Verifica e inténtalo de nuevo.',
+        ...(process.env.NODE_ENV !== 'production' && {
+          debug: {
+            stage: 'createCustomer',
+            object_error: culqiCustomer.object_error,
+            type: culqiCustomer.type,
+            code: culqiCustomer.code,
+            merchant_message: culqiCustomer.merchant_message,
+            user_message: culqiCustomer.user_message,
+          },
+        }),
       },
       { status: 402 }
     );
@@ -137,7 +148,18 @@ export async function POST(request: NextRequest) {
       {
         error:
           culqiCard.user_message ??
+          culqiCard.merchant_message ??
           'No pudimos validar tu tarjeta. Verifica los datos e inténtalo de nuevo.',
+        ...(process.env.NODE_ENV !== 'production' && {
+          debug: {
+            stage: 'createCard',
+            object_error: culqiCard.object_error,
+            type: culqiCard.type,
+            code: culqiCard.code,
+            merchant_message: culqiCard.merchant_message,
+            user_message: culqiCard.user_message,
+          },
+        }),
       },
       { status: 402 }
     );
@@ -158,7 +180,18 @@ export async function POST(request: NextRequest) {
       {
         error:
           culqiSubscription.user_message ??
+          culqiSubscription.merchant_message ??
           'No pudimos activar la suscripción. Inténtalo de nuevo en unos minutos.',
+        ...(process.env.NODE_ENV !== 'production' && {
+          debug: {
+            stage: 'createSubscription',
+            object_error: culqiSubscription.object_error,
+            type: culqiSubscription.type,
+            code: culqiSubscription.code,
+            merchant_message: culqiSubscription.merchant_message,
+            user_message: culqiSubscription.user_message,
+          },
+        }),
       },
       { status: 402 }
     );
