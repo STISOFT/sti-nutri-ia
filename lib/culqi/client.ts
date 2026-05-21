@@ -161,6 +161,53 @@ export async function createCulqiCustomer(
   return culqiRequest<CulqiCustomerResponse>('POST', '/customers', input);
 }
 
+export interface CulqiCustomerListResponse extends CulqiErrorEnvelope {
+  data?: Array<CulqiCustomerResponse>;
+  paging?: { cursors?: { before?: string; after?: string }; remaining_items?: number };
+}
+
+/**
+ * Lista customers con filtros opcionales. Útil para buscar por email
+ * antes de crear uno nuevo (Culqi no permite emails duplicados y
+ * devuelve "Un cliente está registrado actualmente con este email"
+ * si intentás crear uno que ya existe).
+ */
+export async function listCulqiCustomers(
+  params: { email?: string; limit?: number; before?: string; after?: string } = {}
+): Promise<CulqiCustomerListResponse> {
+  const query = new URLSearchParams();
+  if (params.email) query.set('email', params.email);
+  if (params.limit !== undefined) query.set('limit', String(params.limit));
+  if (params.before) query.set('before', params.before);
+  if (params.after) query.set('after', params.after);
+  const qs = query.toString();
+  return culqiRequest<CulqiCustomerListResponse>(
+    'GET',
+    `/customers${qs ? '?' + qs : ''}`
+  );
+}
+
+/**
+ * Helper idempotente: devuelve el customer existente que coincide
+ * con el email, o lo crea si no existe. Evita el error 402 cuando
+ * el customer ya fue creado por un intento previo (común en flujos
+ * de retry o cuando un user vuelve a suscribirse).
+ */
+export async function getOrCreateCulqiCustomer(
+  input: CulqiCustomerInput
+): Promise<CulqiCustomerResponse> {
+  // 1. Buscar por email
+  const list = await listCulqiCustomers({ email: input.email });
+  if (!list.object_error && list.data && list.data.length > 0) {
+    const existing = list.data.find((c) => c.email === input.email) ?? list.data[0];
+    if (existing?.id) {
+      return existing;
+    }
+  }
+  // 2. Crear si no existe
+  return createCulqiCustomer(input);
+}
+
 // ────────────────────────────────────────────────────────────
 // CARDS
 // ────────────────────────────────────────────────────────────

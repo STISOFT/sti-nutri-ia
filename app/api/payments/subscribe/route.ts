@@ -4,7 +4,7 @@ import { cookies } from 'next/headers';
 import { prisma } from '@/lib/prisma/client';
 import { subscribePaymentSchema } from '@/lib/validations/payment';
 import {
-  createCulqiCustomer,
+  getOrCreateCulqiCustomer,
   createCulqiCard,
   createCulqiSubscription,
 } from '@/lib/culqi/client';
@@ -96,9 +96,12 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // ── 5. Crear Customer en Culqi ───────────────────────────────
-  console.log(`[payments/subscribe] Creando customer para user ${user.id}`);
-  const culqiCustomer = await createCulqiCustomer({
+  // ── 5. Crear (o reutilizar) Customer en Culqi ────────────────
+  // Culqi no permite emails duplicados — si el customer ya existe
+  // (intento anterior fallido, resuscripción, etc.), reutilizamos
+  // su ID en vez de fallar con "Un cliente está registrado...".
+  console.log(`[payments/subscribe] Obteniendo/creando customer para user ${user.id}`);
+  const culqiCustomer = await getOrCreateCulqiCustomer({
     first_name: customer.first_name,
     last_name: customer.last_name,
     email: customer.email,
