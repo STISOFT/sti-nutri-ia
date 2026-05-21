@@ -205,7 +205,7 @@ export interface CulqiPlanResponse extends CulqiErrorEnvelope {
 export async function createCulqiPlan(
   input: CulqiPlanInput
 ): Promise<CulqiPlanResponse> {
-  return culqiRequest<CulqiPlanResponse>('POST', '/plans', input);
+  return culqiRequest<CulqiPlanResponse>('POST', '/recurrent/plans', input);
 }
 
 export interface CulqiPlanListResponse extends CulqiErrorEnvelope {
@@ -221,7 +221,10 @@ export async function listCulqiPlans(
   if (params.before) query.set('before', params.before);
   if (params.after) query.set('after', params.after);
   const qs = query.toString();
-  return culqiRequest<CulqiPlanListResponse>('GET', `/plans${qs ? '?' + qs : ''}`);
+  return culqiRequest<CulqiPlanListResponse>(
+    'GET',
+    `/recurrent/plans${qs ? '?' + qs : ''}`
+  );
 }
 
 // ────────────────────────────────────────────────────────────
@@ -250,7 +253,11 @@ export interface CulqiSubscriptionResponse extends CulqiErrorEnvelope {
 export async function createCulqiSubscription(
   input: CulqiSubscriptionInput
 ): Promise<CulqiSubscriptionResponse> {
-  return culqiRequest<CulqiSubscriptionResponse>('POST', '/subscriptions', input);
+  return culqiRequest<CulqiSubscriptionResponse>(
+    'POST',
+    '/recurrent/subscriptions',
+    input
+  );
 }
 
 export async function getCulqiSubscription(
@@ -258,7 +265,7 @@ export async function getCulqiSubscription(
 ): Promise<CulqiSubscriptionResponse> {
   return culqiRequest<CulqiSubscriptionResponse>(
     'GET',
-    `/subscriptions/${subscriptionId}`
+    `/recurrent/subscriptions/${subscriptionId}`
   );
 }
 
@@ -267,7 +274,7 @@ export async function cancelCulqiSubscription(
 ): Promise<CulqiSubscriptionResponse> {
   return culqiRequest<CulqiSubscriptionResponse>(
     'DELETE',
-    `/subscriptions/${subscriptionId}`
+    `/recurrent/subscriptions/${subscriptionId}`
   );
 }
 
