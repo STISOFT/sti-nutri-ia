@@ -41,10 +41,14 @@ export type SubscriptionMinAggregateOutputType = {
   status: string | null
   culqi_order_id: string | null
   culqi_charge_id: string | null
+  culqi_customer_id: string | null
+  culqi_card_id: string | null
+  culqi_subscription_id: string | null
   amount_cents: number | null
   currency: string | null
   current_period_start: Date | null
   current_period_end: Date | null
+  cancelled_at: Date | null
   created_at: Date | null
   updated_at: Date | null
 }
@@ -56,10 +60,14 @@ export type SubscriptionMaxAggregateOutputType = {
   status: string | null
   culqi_order_id: string | null
   culqi_charge_id: string | null
+  culqi_customer_id: string | null
+  culqi_card_id: string | null
+  culqi_subscription_id: string | null
   amount_cents: number | null
   currency: string | null
   current_period_start: Date | null
   current_period_end: Date | null
+  cancelled_at: Date | null
   created_at: Date | null
   updated_at: Date | null
 }
@@ -71,10 +79,14 @@ export type SubscriptionCountAggregateOutputType = {
   status: number
   culqi_order_id: number
   culqi_charge_id: number
+  culqi_customer_id: number
+  culqi_card_id: number
+  culqi_subscription_id: number
   amount_cents: number
   currency: number
   current_period_start: number
   current_period_end: number
+  cancelled_at: number
   created_at: number
   updated_at: number
   _all: number
@@ -96,10 +108,14 @@ export type SubscriptionMinAggregateInputType = {
   status?: true
   culqi_order_id?: true
   culqi_charge_id?: true
+  culqi_customer_id?: true
+  culqi_card_id?: true
+  culqi_subscription_id?: true
   amount_cents?: true
   currency?: true
   current_period_start?: true
   current_period_end?: true
+  cancelled_at?: true
   created_at?: true
   updated_at?: true
 }
@@ -111,10 +127,14 @@ export type SubscriptionMaxAggregateInputType = {
   status?: true
   culqi_order_id?: true
   culqi_charge_id?: true
+  culqi_customer_id?: true
+  culqi_card_id?: true
+  culqi_subscription_id?: true
   amount_cents?: true
   currency?: true
   current_period_start?: true
   current_period_end?: true
+  cancelled_at?: true
   created_at?: true
   updated_at?: true
 }
@@ -126,10 +146,14 @@ export type SubscriptionCountAggregateInputType = {
   status?: true
   culqi_order_id?: true
   culqi_charge_id?: true
+  culqi_customer_id?: true
+  culqi_card_id?: true
+  culqi_subscription_id?: true
   amount_cents?: true
   currency?: true
   current_period_start?: true
   current_period_end?: true
+  cancelled_at?: true
   created_at?: true
   updated_at?: true
   _all?: true
@@ -228,10 +252,14 @@ export type SubscriptionGroupByOutputType = {
   status: string
   culqi_order_id: string | null
   culqi_charge_id: string | null
+  culqi_customer_id: string | null
+  culqi_card_id: string | null
+  culqi_subscription_id: string | null
   amount_cents: number
   currency: string
   current_period_start: Date | null
   current_period_end: Date | null
+  cancelled_at: Date | null
   created_at: Date
   updated_at: Date
   _count: SubscriptionCountAggregateOutputType | null
@@ -266,10 +294,14 @@ export type SubscriptionWhereInput = {
   status?: Prisma.StringFilter<"Subscription"> | string
   culqi_order_id?: Prisma.StringNullableFilter<"Subscription"> | string | null
   culqi_charge_id?: Prisma.StringNullableFilter<"Subscription"> | string | null
+  culqi_customer_id?: Prisma.StringNullableFilter<"Subscription"> | string | null
+  culqi_card_id?: Prisma.StringNullableFilter<"Subscription"> | string | null
+  culqi_subscription_id?: Prisma.StringNullableFilter<"Subscription"> | string | null
   amount_cents?: Prisma.IntFilter<"Subscription"> | number
   currency?: Prisma.StringFilter<"Subscription"> | string
   current_period_start?: Prisma.DateTimeNullableFilter<"Subscription"> | Date | string | null
   current_period_end?: Prisma.DateTimeNullableFilter<"Subscription"> | Date | string | null
+  cancelled_at?: Prisma.DateTimeNullableFilter<"Subscription"> | Date | string | null
   created_at?: Prisma.DateTimeFilter<"Subscription"> | Date | string
   updated_at?: Prisma.DateTimeFilter<"Subscription"> | Date | string
   profile?: Prisma.XOR<Prisma.ProfileScalarRelationFilter, Prisma.ProfileWhereInput>
@@ -283,10 +315,14 @@ export type SubscriptionOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   culqi_order_id?: Prisma.SortOrderInput | Prisma.SortOrder
   culqi_charge_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  culqi_customer_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  culqi_card_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  culqi_subscription_id?: Prisma.SortOrderInput | Prisma.SortOrder
   amount_cents?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   current_period_start?: Prisma.SortOrderInput | Prisma.SortOrder
   current_period_end?: Prisma.SortOrderInput | Prisma.SortOrder
+  cancelled_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   profile?: Prisma.ProfileOrderByWithRelationInput
@@ -295,6 +331,7 @@ export type SubscriptionOrderByWithRelationInput = {
 
 export type SubscriptionWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  culqi_subscription_id?: string
   AND?: Prisma.SubscriptionWhereInput | Prisma.SubscriptionWhereInput[]
   OR?: Prisma.SubscriptionWhereInput[]
   NOT?: Prisma.SubscriptionWhereInput | Prisma.SubscriptionWhereInput[]
@@ -303,15 +340,18 @@ export type SubscriptionWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.StringFilter<"Subscription"> | string
   culqi_order_id?: Prisma.StringNullableFilter<"Subscription"> | string | null
   culqi_charge_id?: Prisma.StringNullableFilter<"Subscription"> | string | null
+  culqi_customer_id?: Prisma.StringNullableFilter<"Subscription"> | string | null
+  culqi_card_id?: Prisma.StringNullableFilter<"Subscription"> | string | null
   amount_cents?: Prisma.IntFilter<"Subscription"> | number
   currency?: Prisma.StringFilter<"Subscription"> | string
   current_period_start?: Prisma.DateTimeNullableFilter<"Subscription"> | Date | string | null
   current_period_end?: Prisma.DateTimeNullableFilter<"Subscription"> | Date | string | null
+  cancelled_at?: Prisma.DateTimeNullableFilter<"Subscription"> | Date | string | null
   created_at?: Prisma.DateTimeFilter<"Subscription"> | Date | string
   updated_at?: Prisma.DateTimeFilter<"Subscription"> | Date | string
   profile?: Prisma.XOR<Prisma.ProfileScalarRelationFilter, Prisma.ProfileWhereInput>
   diet_plans?: Prisma.DietPlanListRelationFilter
-}, "id">
+}, "id" | "culqi_subscription_id">
 
 export type SubscriptionOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -320,10 +360,14 @@ export type SubscriptionOrderByWithAggregationInput = {
   status?: Prisma.SortOrder
   culqi_order_id?: Prisma.SortOrderInput | Prisma.SortOrder
   culqi_charge_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  culqi_customer_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  culqi_card_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  culqi_subscription_id?: Prisma.SortOrderInput | Prisma.SortOrder
   amount_cents?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   current_period_start?: Prisma.SortOrderInput | Prisma.SortOrder
   current_period_end?: Prisma.SortOrderInput | Prisma.SortOrder
+  cancelled_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   _count?: Prisma.SubscriptionCountOrderByAggregateInput
@@ -343,10 +387,14 @@ export type SubscriptionScalarWhereWithAggregatesInput = {
   status?: Prisma.StringWithAggregatesFilter<"Subscription"> | string
   culqi_order_id?: Prisma.StringNullableWithAggregatesFilter<"Subscription"> | string | null
   culqi_charge_id?: Prisma.StringNullableWithAggregatesFilter<"Subscription"> | string | null
+  culqi_customer_id?: Prisma.StringNullableWithAggregatesFilter<"Subscription"> | string | null
+  culqi_card_id?: Prisma.StringNullableWithAggregatesFilter<"Subscription"> | string | null
+  culqi_subscription_id?: Prisma.StringNullableWithAggregatesFilter<"Subscription"> | string | null
   amount_cents?: Prisma.IntWithAggregatesFilter<"Subscription"> | number
   currency?: Prisma.StringWithAggregatesFilter<"Subscription"> | string
   current_period_start?: Prisma.DateTimeNullableWithAggregatesFilter<"Subscription"> | Date | string | null
   current_period_end?: Prisma.DateTimeNullableWithAggregatesFilter<"Subscription"> | Date | string | null
+  cancelled_at?: Prisma.DateTimeNullableWithAggregatesFilter<"Subscription"> | Date | string | null
   created_at?: Prisma.DateTimeWithAggregatesFilter<"Subscription"> | Date | string
   updated_at?: Prisma.DateTimeWithAggregatesFilter<"Subscription"> | Date | string
 }
@@ -357,10 +405,14 @@ export type SubscriptionCreateInput = {
   status?: string
   culqi_order_id?: string | null
   culqi_charge_id?: string | null
+  culqi_customer_id?: string | null
+  culqi_card_id?: string | null
+  culqi_subscription_id?: string | null
   amount_cents: number
   currency?: string
   current_period_start?: Date | string | null
   current_period_end?: Date | string | null
+  cancelled_at?: Date | string | null
   created_at?: Date | string
   updated_at?: Date | string
   profile: Prisma.ProfileCreateNestedOneWithoutSubscriptionsInput
@@ -374,10 +426,14 @@ export type SubscriptionUncheckedCreateInput = {
   status?: string
   culqi_order_id?: string | null
   culqi_charge_id?: string | null
+  culqi_customer_id?: string | null
+  culqi_card_id?: string | null
+  culqi_subscription_id?: string | null
   amount_cents: number
   currency?: string
   current_period_start?: Date | string | null
   current_period_end?: Date | string | null
+  cancelled_at?: Date | string | null
   created_at?: Date | string
   updated_at?: Date | string
   diet_plans?: Prisma.DietPlanUncheckedCreateNestedManyWithoutSubscriptionInput
@@ -389,10 +445,14 @@ export type SubscriptionUpdateInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   culqi_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   culqi_charge_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  culqi_customer_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  culqi_card_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  culqi_subscription_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amount_cents?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   current_period_start?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   current_period_end?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelled_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profile?: Prisma.ProfileUpdateOneRequiredWithoutSubscriptionsNestedInput
@@ -406,10 +466,14 @@ export type SubscriptionUncheckedUpdateInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   culqi_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   culqi_charge_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  culqi_customer_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  culqi_card_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  culqi_subscription_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amount_cents?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   current_period_start?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   current_period_end?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelled_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   diet_plans?: Prisma.DietPlanUncheckedUpdateManyWithoutSubscriptionNestedInput
@@ -422,10 +486,14 @@ export type SubscriptionCreateManyInput = {
   status?: string
   culqi_order_id?: string | null
   culqi_charge_id?: string | null
+  culqi_customer_id?: string | null
+  culqi_card_id?: string | null
+  culqi_subscription_id?: string | null
   amount_cents: number
   currency?: string
   current_period_start?: Date | string | null
   current_period_end?: Date | string | null
+  cancelled_at?: Date | string | null
   created_at?: Date | string
   updated_at?: Date | string
 }
@@ -436,10 +504,14 @@ export type SubscriptionUpdateManyMutationInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   culqi_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   culqi_charge_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  culqi_customer_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  culqi_card_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  culqi_subscription_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amount_cents?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   current_period_start?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   current_period_end?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelled_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -451,10 +523,14 @@ export type SubscriptionUncheckedUpdateManyInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   culqi_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   culqi_charge_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  culqi_customer_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  culqi_card_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  culqi_subscription_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amount_cents?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   current_period_start?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   current_period_end?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelled_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -476,10 +552,14 @@ export type SubscriptionCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   culqi_order_id?: Prisma.SortOrder
   culqi_charge_id?: Prisma.SortOrder
+  culqi_customer_id?: Prisma.SortOrder
+  culqi_card_id?: Prisma.SortOrder
+  culqi_subscription_id?: Prisma.SortOrder
   amount_cents?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   current_period_start?: Prisma.SortOrder
   current_period_end?: Prisma.SortOrder
+  cancelled_at?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
 }
@@ -495,10 +575,14 @@ export type SubscriptionMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   culqi_order_id?: Prisma.SortOrder
   culqi_charge_id?: Prisma.SortOrder
+  culqi_customer_id?: Prisma.SortOrder
+  culqi_card_id?: Prisma.SortOrder
+  culqi_subscription_id?: Prisma.SortOrder
   amount_cents?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   current_period_start?: Prisma.SortOrder
   current_period_end?: Prisma.SortOrder
+  cancelled_at?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
 }
@@ -510,10 +594,14 @@ export type SubscriptionMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   culqi_order_id?: Prisma.SortOrder
   culqi_charge_id?: Prisma.SortOrder
+  culqi_customer_id?: Prisma.SortOrder
+  culqi_card_id?: Prisma.SortOrder
+  culqi_subscription_id?: Prisma.SortOrder
   amount_cents?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   current_period_start?: Prisma.SortOrder
   current_period_end?: Prisma.SortOrder
+  cancelled_at?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
 }
@@ -603,10 +691,14 @@ export type SubscriptionCreateWithoutProfileInput = {
   status?: string
   culqi_order_id?: string | null
   culqi_charge_id?: string | null
+  culqi_customer_id?: string | null
+  culqi_card_id?: string | null
+  culqi_subscription_id?: string | null
   amount_cents: number
   currency?: string
   current_period_start?: Date | string | null
   current_period_end?: Date | string | null
+  cancelled_at?: Date | string | null
   created_at?: Date | string
   updated_at?: Date | string
   diet_plans?: Prisma.DietPlanCreateNestedManyWithoutSubscriptionInput
@@ -618,10 +710,14 @@ export type SubscriptionUncheckedCreateWithoutProfileInput = {
   status?: string
   culqi_order_id?: string | null
   culqi_charge_id?: string | null
+  culqi_customer_id?: string | null
+  culqi_card_id?: string | null
+  culqi_subscription_id?: string | null
   amount_cents: number
   currency?: string
   current_period_start?: Date | string | null
   current_period_end?: Date | string | null
+  cancelled_at?: Date | string | null
   created_at?: Date | string
   updated_at?: Date | string
   diet_plans?: Prisma.DietPlanUncheckedCreateNestedManyWithoutSubscriptionInput
@@ -663,10 +759,14 @@ export type SubscriptionScalarWhereInput = {
   status?: Prisma.StringFilter<"Subscription"> | string
   culqi_order_id?: Prisma.StringNullableFilter<"Subscription"> | string | null
   culqi_charge_id?: Prisma.StringNullableFilter<"Subscription"> | string | null
+  culqi_customer_id?: Prisma.StringNullableFilter<"Subscription"> | string | null
+  culqi_card_id?: Prisma.StringNullableFilter<"Subscription"> | string | null
+  culqi_subscription_id?: Prisma.StringNullableFilter<"Subscription"> | string | null
   amount_cents?: Prisma.IntFilter<"Subscription"> | number
   currency?: Prisma.StringFilter<"Subscription"> | string
   current_period_start?: Prisma.DateTimeNullableFilter<"Subscription"> | Date | string | null
   current_period_end?: Prisma.DateTimeNullableFilter<"Subscription"> | Date | string | null
+  cancelled_at?: Prisma.DateTimeNullableFilter<"Subscription"> | Date | string | null
   created_at?: Prisma.DateTimeFilter<"Subscription"> | Date | string
   updated_at?: Prisma.DateTimeFilter<"Subscription"> | Date | string
 }
@@ -677,10 +777,14 @@ export type SubscriptionCreateWithoutDiet_plansInput = {
   status?: string
   culqi_order_id?: string | null
   culqi_charge_id?: string | null
+  culqi_customer_id?: string | null
+  culqi_card_id?: string | null
+  culqi_subscription_id?: string | null
   amount_cents: number
   currency?: string
   current_period_start?: Date | string | null
   current_period_end?: Date | string | null
+  cancelled_at?: Date | string | null
   created_at?: Date | string
   updated_at?: Date | string
   profile: Prisma.ProfileCreateNestedOneWithoutSubscriptionsInput
@@ -693,10 +797,14 @@ export type SubscriptionUncheckedCreateWithoutDiet_plansInput = {
   status?: string
   culqi_order_id?: string | null
   culqi_charge_id?: string | null
+  culqi_customer_id?: string | null
+  culqi_card_id?: string | null
+  culqi_subscription_id?: string | null
   amount_cents: number
   currency?: string
   current_period_start?: Date | string | null
   current_period_end?: Date | string | null
+  cancelled_at?: Date | string | null
   created_at?: Date | string
   updated_at?: Date | string
 }
@@ -723,10 +831,14 @@ export type SubscriptionUpdateWithoutDiet_plansInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   culqi_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   culqi_charge_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  culqi_customer_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  culqi_card_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  culqi_subscription_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amount_cents?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   current_period_start?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   current_period_end?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelled_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profile?: Prisma.ProfileUpdateOneRequiredWithoutSubscriptionsNestedInput
@@ -739,10 +851,14 @@ export type SubscriptionUncheckedUpdateWithoutDiet_plansInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   culqi_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   culqi_charge_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  culqi_customer_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  culqi_card_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  culqi_subscription_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amount_cents?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   current_period_start?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   current_period_end?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelled_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -753,10 +869,14 @@ export type SubscriptionCreateManyProfileInput = {
   status?: string
   culqi_order_id?: string | null
   culqi_charge_id?: string | null
+  culqi_customer_id?: string | null
+  culqi_card_id?: string | null
+  culqi_subscription_id?: string | null
   amount_cents: number
   currency?: string
   current_period_start?: Date | string | null
   current_period_end?: Date | string | null
+  cancelled_at?: Date | string | null
   created_at?: Date | string
   updated_at?: Date | string
 }
@@ -767,10 +887,14 @@ export type SubscriptionUpdateWithoutProfileInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   culqi_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   culqi_charge_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  culqi_customer_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  culqi_card_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  culqi_subscription_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amount_cents?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   current_period_start?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   current_period_end?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelled_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   diet_plans?: Prisma.DietPlanUpdateManyWithoutSubscriptionNestedInput
@@ -782,10 +906,14 @@ export type SubscriptionUncheckedUpdateWithoutProfileInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   culqi_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   culqi_charge_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  culqi_customer_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  culqi_card_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  culqi_subscription_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amount_cents?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   current_period_start?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   current_period_end?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelled_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   diet_plans?: Prisma.DietPlanUncheckedUpdateManyWithoutSubscriptionNestedInput
@@ -797,10 +925,14 @@ export type SubscriptionUncheckedUpdateManyWithoutProfileInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   culqi_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   culqi_charge_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  culqi_customer_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  culqi_card_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  culqi_subscription_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amount_cents?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   current_period_start?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   current_period_end?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelled_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -843,10 +975,14 @@ export type SubscriptionSelect<ExtArgs extends runtime.Types.Extensions.Internal
   status?: boolean
   culqi_order_id?: boolean
   culqi_charge_id?: boolean
+  culqi_customer_id?: boolean
+  culqi_card_id?: boolean
+  culqi_subscription_id?: boolean
   amount_cents?: boolean
   currency?: boolean
   current_period_start?: boolean
   current_period_end?: boolean
+  cancelled_at?: boolean
   created_at?: boolean
   updated_at?: boolean
   profile?: boolean | Prisma.ProfileDefaultArgs<ExtArgs>
@@ -861,10 +997,14 @@ export type SubscriptionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   status?: boolean
   culqi_order_id?: boolean
   culqi_charge_id?: boolean
+  culqi_customer_id?: boolean
+  culqi_card_id?: boolean
+  culqi_subscription_id?: boolean
   amount_cents?: boolean
   currency?: boolean
   current_period_start?: boolean
   current_period_end?: boolean
+  cancelled_at?: boolean
   created_at?: boolean
   updated_at?: boolean
   profile?: boolean | Prisma.ProfileDefaultArgs<ExtArgs>
@@ -877,10 +1017,14 @@ export type SubscriptionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   status?: boolean
   culqi_order_id?: boolean
   culqi_charge_id?: boolean
+  culqi_customer_id?: boolean
+  culqi_card_id?: boolean
+  culqi_subscription_id?: boolean
   amount_cents?: boolean
   currency?: boolean
   current_period_start?: boolean
   current_period_end?: boolean
+  cancelled_at?: boolean
   created_at?: boolean
   updated_at?: boolean
   profile?: boolean | Prisma.ProfileDefaultArgs<ExtArgs>
@@ -893,15 +1037,19 @@ export type SubscriptionSelectScalar = {
   status?: boolean
   culqi_order_id?: boolean
   culqi_charge_id?: boolean
+  culqi_customer_id?: boolean
+  culqi_card_id?: boolean
+  culqi_subscription_id?: boolean
   amount_cents?: boolean
   currency?: boolean
   current_period_start?: boolean
   current_period_end?: boolean
+  cancelled_at?: boolean
   created_at?: boolean
   updated_at?: boolean
 }
 
-export type SubscriptionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "user_id" | "plan_id" | "status" | "culqi_order_id" | "culqi_charge_id" | "amount_cents" | "currency" | "current_period_start" | "current_period_end" | "created_at" | "updated_at", ExtArgs["result"]["subscription"]>
+export type SubscriptionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "user_id" | "plan_id" | "status" | "culqi_order_id" | "culqi_charge_id" | "culqi_customer_id" | "culqi_card_id" | "culqi_subscription_id" | "amount_cents" | "currency" | "current_period_start" | "current_period_end" | "cancelled_at" | "created_at" | "updated_at", ExtArgs["result"]["subscription"]>
 export type SubscriptionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   profile?: boolean | Prisma.ProfileDefaultArgs<ExtArgs>
   diet_plans?: boolean | Prisma.Subscription$diet_plansArgs<ExtArgs>
@@ -927,10 +1075,14 @@ export type $SubscriptionPayload<ExtArgs extends runtime.Types.Extensions.Intern
     status: string
     culqi_order_id: string | null
     culqi_charge_id: string | null
+    culqi_customer_id: string | null
+    culqi_card_id: string | null
+    culqi_subscription_id: string | null
     amount_cents: number
     currency: string
     current_period_start: Date | null
     current_period_end: Date | null
+    cancelled_at: Date | null
     created_at: Date
     updated_at: Date
   }, ExtArgs["result"]["subscription"]>
@@ -1364,10 +1516,14 @@ export interface SubscriptionFieldRefs {
   readonly status: Prisma.FieldRef<"Subscription", 'String'>
   readonly culqi_order_id: Prisma.FieldRef<"Subscription", 'String'>
   readonly culqi_charge_id: Prisma.FieldRef<"Subscription", 'String'>
+  readonly culqi_customer_id: Prisma.FieldRef<"Subscription", 'String'>
+  readonly culqi_card_id: Prisma.FieldRef<"Subscription", 'String'>
+  readonly culqi_subscription_id: Prisma.FieldRef<"Subscription", 'String'>
   readonly amount_cents: Prisma.FieldRef<"Subscription", 'Int'>
   readonly currency: Prisma.FieldRef<"Subscription", 'String'>
   readonly current_period_start: Prisma.FieldRef<"Subscription", 'DateTime'>
   readonly current_period_end: Prisma.FieldRef<"Subscription", 'DateTime'>
+  readonly cancelled_at: Prisma.FieldRef<"Subscription", 'DateTime'>
   readonly created_at: Prisma.FieldRef<"Subscription", 'DateTime'>
   readonly updated_at: Prisma.FieldRef<"Subscription", 'DateTime'>
 }

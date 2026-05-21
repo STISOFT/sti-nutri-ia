@@ -93,10 +93,14 @@ export const SubscriptionScalarFieldEnum = {
   status: 'status',
   culqi_order_id: 'culqi_order_id',
   culqi_charge_id: 'culqi_charge_id',
+  culqi_customer_id: 'culqi_customer_id',
+  culqi_card_id: 'culqi_card_id',
+  culqi_subscription_id: 'culqi_subscription_id',
   amount_cents: 'amount_cents',
   currency: 'currency',
   current_period_start: 'current_period_start',
   current_period_end: 'current_period_end',
+  cancelled_at: 'cancelled_at',
   created_at: 'created_at',
   updated_at: 'updated_at'
 } as const

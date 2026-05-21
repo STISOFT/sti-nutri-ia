@@ -1,21 +1,21 @@
-// Funciones server-side para interactuar con la API de Culqi
+// ============================================================
+// Cliente server-side para la API de Culqi (v2).
+// Cubre:
+//   • Charges (legacy, cargo único)
+//   • Customers, Cards, Plans, Subscriptions (suscripciones recurrentes)
+//   • Verificación de firma de webhook
+//
+// Convenciones:
+//   - Llave secreta vía process.env.CULQI_PRIVATE_KEY (sk_test_* o sk_live_*)
+//   - Todas las funciones devuelven un objeto que puede contener `object_error`
+//     cuando Culqi rechaza la operación. El caller debe inspeccionar.
+//   - Errores de red levantan excepción.
+// ============================================================
 
-interface CulqiChargeParams {
-  amount: number;           // en céntimos (ej: 4900 = S/49.00)
-  currency_code: 'PEN';
-  email: string;
-  source_id: string;        // token generado por Culqi.js en el cliente
-  description?: string;
-}
+const API_BASE = 'https://api.culqi.com/v2';
 
-interface CulqiChargeResponse {
-  id?: string;
-  object?: string;
-  amount?: number;
-  currency_code?: string;
-  email?: string;
-  source?: { id: string };
-  // Error de Culqi
+/** Posibles campos de error que devuelve Culqi cuando la operación falla. */
+export interface CulqiErrorEnvelope {
   object_error?: string;
   type?: string;
   merchant_message?: string;
@@ -24,42 +24,350 @@ interface CulqiChargeResponse {
   decline_code?: string;
 }
 
+// ────────────────────────────────────────────────────────────
+// Helpers
+// ────────────────────────────────────────────────────────────
+
+function getSecretKey(): string {
+  // Aceptamos ambos nombres para compatibilidad con la convención
+  // anterior del .env (CULQI_SECRET_KEY) y la nueva (CULQI_PRIVATE_KEY,
+  // que es el nombre oficial en la doc de Culqi).
+  const key = process.env.CULQI_PRIVATE_KEY ?? process.env.CULQI_SECRET_KEY;
+  if (!key) {
+    throw new Error(
+      'CULQI_PRIVATE_KEY (o CULQI_SECRET_KEY) no configurado en el entorno'
+    );
+  }
+  return key;
+}
+
+async function culqiRequest<T>(
+  method: 'GET' | 'POST' | 'DELETE',
+  path: string,
+  body?: unknown
+): Promise<T & CulqiErrorEnvelope> {
+  const url = `${API_BASE}${path}`;
+  const init: RequestInit = {
+    method,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${getSecretKey()}`,
+    },
+  };
+  if (body !== undefined) init.body = JSON.stringify(body);
+  const res = await fetch(url, init);
+
+  // Capturamos el body como texto primero para poder diagnosticar
+  // respuestas no-JSON (HTML de error, body vacío en 4xx/5xx, etc.).
+  const text = await res.text();
+
+  // Headers útiles para diagnóstico (request id, content-type).
+  const reqId =
+    res.headers.get('x-request-id') ?? res.headers.get('request-id') ?? '';
+  const contentType = res.headers.get('content-type') ?? '';
+
+  if (!text) {
+    return {
+      object_error: 'http_error',
+      type: String(res.status),
+      merchant_message: `Culqi devolvió HTTP ${res.status} sin body (${method} ${url}${reqId ? ' req=' + reqId : ''} content-type=${contentType || 'none'})`,
+      user_message: `Error en la integración con Culqi (HTTP ${res.status}).`,
+    } as T & CulqiErrorEnvelope;
+  }
+  try {
+    return JSON.parse(text) as T & CulqiErrorEnvelope;
+  } catch {
+    return {
+      object_error: 'parse_error',
+      type: String(res.status),
+      merchant_message: `Culqi devolvió respuesta no-JSON (HTTP ${res.status}, ${url}): ${text.slice(0, 200)}`,
+      user_message: 'Respuesta inesperada de Culqi. Inténtalo de nuevo.',
+    } as T & CulqiErrorEnvelope;
+  }
+}
+
+// ────────────────────────────────────────────────────────────
+// CHARGES (legacy — cargo único)
+// ────────────────────────────────────────────────────────────
+
+interface CulqiChargeParams {
+  amount: number; // céntimos PEN
+  currency_code: 'PEN';
+  email: string;
+  source_id: string; // toks_xxx
+  description?: string;
+}
+
+interface CulqiChargeResponse extends CulqiErrorEnvelope {
+  id?: string;
+  object?: string;
+  amount?: number;
+  currency_code?: string;
+  email?: string;
+  source?: { id: string };
+}
+
 /**
- * Crea un cargo en la API de Culqi usando el token del cliente.
- * Se llama desde el API Route /api/payments/confirm (server-side).
+ * Crea un cargo único (one-time). Mantenido para compatibilidad con
+ * el flujo actual; las suscripciones recurrentes usan la pipeline
+ * customers → cards → subscriptions.
+ *
+ * Usa el host legacy `secure.culqi.com` por compatibilidad histórica.
  */
 export async function createCulqiCharge(
   params: CulqiChargeParams
 ): Promise<CulqiChargeResponse> {
-  const secretKey = process.env.CULQI_PRIVATE_KEY;
-
-  if (!secretKey) {
-    throw new Error('CULQI_PRIVATE_KEY no configurado');
-  }
-
   const response = await fetch('https://secure.culqi.com/v2/charges', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${secretKey}`,
+      Authorization: `Bearer ${getSecretKey()}`,
     },
     body: JSON.stringify(params),
   });
+  return (await response.json()) as CulqiChargeResponse;
+}
 
-  const data: CulqiChargeResponse = await response.json();
-  return data;
+// ────────────────────────────────────────────────────────────
+// CUSTOMERS
+// ────────────────────────────────────────────────────────────
+
+export interface CulqiCustomerInput {
+  first_name: string;
+  last_name: string;
+  email: string;
+  address: string;
+  address_city: string;
+  country_code: string; // ISO 3166-1 alpha-2, ej. "PE"
+  phone_number: string;
+  metadata?: Record<string, string>;
+}
+
+export interface CulqiCustomerResponse extends CulqiErrorEnvelope {
+  id?: string; // cus_xxx
+  object?: 'customer';
+  email?: string;
+  first_name?: string;
+  last_name?: string;
+  cards?: Array<{ id: string }>;
+}
+
+export async function createCulqiCustomer(
+  input: CulqiCustomerInput
+): Promise<CulqiCustomerResponse> {
+  // Customers usa POST /v2/customers (sin /create). Solo los recursos
+  // de /recurrent/ (plans, subscriptions) llevan el sufijo /create.
+  // Confirmado en el SDK oficial Go: github.com/culqi/culqi-go.
+  return culqiRequest<CulqiCustomerResponse>('POST', '/customers', input);
+}
+
+export interface CulqiCustomerListResponse extends CulqiErrorEnvelope {
+  data?: Array<CulqiCustomerResponse>;
+  paging?: { cursors?: { before?: string; after?: string }; remaining_items?: number };
 }
 
 /**
+ * Lista customers con filtros opcionales. Útil para buscar por email
+ * antes de crear uno nuevo (Culqi no permite emails duplicados y
+ * devuelve "Un cliente está registrado actualmente con este email"
+ * si intentás crear uno que ya existe).
+ */
+export async function listCulqiCustomers(
+  params: { email?: string; limit?: number; before?: string; after?: string } = {}
+): Promise<CulqiCustomerListResponse> {
+  const query = new URLSearchParams();
+  if (params.email) query.set('email', params.email);
+  if (params.limit !== undefined) query.set('limit', String(params.limit));
+  if (params.before) query.set('before', params.before);
+  if (params.after) query.set('after', params.after);
+  const qs = query.toString();
+  return culqiRequest<CulqiCustomerListResponse>(
+    'GET',
+    `/customers${qs ? '?' + qs : ''}`
+  );
+}
+
+/**
+ * Helper idempotente: devuelve el customer existente que coincide
+ * con el email, o lo crea si no existe. Evita el error 402 cuando
+ * el customer ya fue creado por un intento previo (común en flujos
+ * de retry o cuando un user vuelve a suscribirse).
+ */
+export async function getOrCreateCulqiCustomer(
+  input: CulqiCustomerInput
+): Promise<CulqiCustomerResponse> {
+  // 1. Buscar por email
+  const list = await listCulqiCustomers({ email: input.email });
+  if (!list.object_error && list.data && list.data.length > 0) {
+    const existing = list.data.find((c) => c.email === input.email) ?? list.data[0];
+    if (existing?.id) {
+      return existing;
+    }
+  }
+  // 2. Crear si no existe
+  return createCulqiCustomer(input);
+}
+
+// ────────────────────────────────────────────────────────────
+// CARDS
+// ────────────────────────────────────────────────────────────
+
+export interface CulqiCardInput {
+  customer_id: string; // cus_xxx
+  token_id: string; // toks_xxx (creado por Culqi.js en el front)
+  validate?: boolean; // valida la tarjeta con un cargo de 1 sol que se reversa
+  metadata?: Record<string, string>;
+}
+
+export interface CulqiCardResponse extends CulqiErrorEnvelope {
+  id?: string; // card_xxx
+  object?: 'card';
+  customer_id?: string;
+  source?: { id: string };
+}
+
+export async function createCulqiCard(
+  input: CulqiCardInput
+): Promise<CulqiCardResponse> {
+  // Cards usa POST /v2/cards (sin /create). Solo los recursos de
+  // /recurrent/ (plans, subscriptions) llevan el sufijo /create.
+  return culqiRequest<CulqiCardResponse>('POST', '/cards', input);
+}
+
+// ────────────────────────────────────────────────────────────
+// PLANS
+// ────────────────────────────────────────────────────────────
+
+/**
+ * Configuración de ciclos iniciales del plan. Permite cobrar un monto
+ * distinto los primeros N ciclos (por ejemplo: 1 mes a S/0 de promo,
+ * luego sigue al precio normal). Para suscripción simple sin ciclo
+ * inicial: `{ count: 0, has_initial_charge: false, amount: 0, interval_unit_time: 1 }`.
+ */
+export interface CulqiInitialCycles {
+  count: number; // cuántos ciclos iniciales (0 = ninguno)
+  has_initial_charge: boolean; // true si los ciclos iniciales se cobran
+  amount: number; // monto del ciclo inicial en céntimos (si has_initial_charge=true)
+  interval_unit_time: 1 | 2 | 3 | 4; // unidad de tiempo del ciclo inicial
+}
+
+export interface CulqiPlanInput {
+  name: string;
+  short_name?: string;
+  description?: string;
+  amount: number; // céntimos
+  currency: 'PEN';
+  interval_unit_time: 1 | 2 | 3 | 4; // 1=día 2=semana 3=mes 4=año
+  interval_count: number;
+  initial_cycles: CulqiInitialCycles;
+  metadata?: Record<string, string>;
+}
+
+export interface CulqiPlanResponse extends CulqiErrorEnvelope {
+  id?: string; // pln_xxx
+  object?: 'plan';
+  name?: string;
+  short_name?: string;
+  amount?: number;
+  currency?: string;
+  interval?: string;
+  metadata?: Record<string, string>;
+}
+
+export async function createCulqiPlan(
+  input: CulqiPlanInput
+): Promise<CulqiPlanResponse> {
+  return culqiRequest<CulqiPlanResponse>('POST', '/recurrent/plans/create', input);
+}
+
+export interface CulqiPlanListResponse extends CulqiErrorEnvelope {
+  data?: Array<CulqiPlanResponse>;
+  paging?: { cursors?: { before?: string; after?: string }; remaining_items?: number };
+}
+
+export async function listCulqiPlans(
+  params: { limit?: number; before?: string; after?: string } = {}
+): Promise<CulqiPlanListResponse> {
+  const query = new URLSearchParams();
+  if (params.limit !== undefined) query.set('limit', String(params.limit));
+  if (params.before) query.set('before', params.before);
+  if (params.after) query.set('after', params.after);
+  const qs = query.toString();
+  return culqiRequest<CulqiPlanListResponse>(
+    'GET',
+    `/recurrent/plans${qs ? '?' + qs : ''}`
+  );
+}
+
+// ────────────────────────────────────────────────────────────
+// SUBSCRIPTIONS
+// ────────────────────────────────────────────────────────────
+
+export interface CulqiSubscriptionInput {
+  card_id: string; // card_xxx
+  plan_id: string; // pln_xxx
+  // Culqi exige confirmación explícita de que el usuario aceptó los
+  // términos y condiciones (requisito regulatorio peruano). Debe
+  // ser `true` — si lo enviás falso o lo omitís, te rechaza con
+  // "El campo 'tyc' es requerido".
+  tyc: boolean;
+  metadata?: Record<string, string>;
+}
+
+export interface CulqiSubscriptionResponse extends CulqiErrorEnvelope {
+  id?: string; // sub_xxx
+  object?: 'subscription';
+  status?: string; // 'active' | 'cancelled' | 'expired' | etc.
+  plan_id?: string;
+  card_id?: string;
+  current_period_start?: number; // unix timestamp (ms)
+  current_period_end?: number;
+  next_billing_date?: number;
+  creation_date?: number;
+  metadata?: Record<string, string>;
+}
+
+export async function createCulqiSubscription(
+  input: CulqiSubscriptionInput
+): Promise<CulqiSubscriptionResponse> {
+  return culqiRequest<CulqiSubscriptionResponse>(
+    'POST',
+    '/recurrent/subscriptions/create',
+    input
+  );
+}
+
+export async function getCulqiSubscription(
+  subscriptionId: string
+): Promise<CulqiSubscriptionResponse> {
+  return culqiRequest<CulqiSubscriptionResponse>(
+    'GET',
+    `/recurrent/subscriptions/${subscriptionId}`
+  );
+}
+
+export async function cancelCulqiSubscription(
+  subscriptionId: string
+): Promise<CulqiSubscriptionResponse> {
+  return culqiRequest<CulqiSubscriptionResponse>(
+    'DELETE',
+    `/recurrent/subscriptions/${subscriptionId}`
+  );
+}
+
+// ────────────────────────────────────────────────────────────
+// WEBHOOK SIGNATURE
+// ────────────────────────────────────────────────────────────
+
+/**
  * Verifica la firma HMAC-SHA256 del webhook de Culqi.
- * Culqi envía el header 'x-culqi-signature' con la firma del body.
+ * Culqi envía el header 'x-culqi-signature' con la firma del body en hex.
  */
 export async function verifyCulqiWebhookSignature(
   rawBody: string,
   signature: string | null
 ): Promise<boolean> {
   const secret = process.env.CULQI_WEBHOOK_SECRET;
-
   if (!secret || !signature) return false;
 
   const encoder = new TextEncoder();
@@ -71,7 +379,6 @@ export async function verifyCulqiWebhookSignature(
     ['verify']
   );
 
-  // La firma de Culqi viene en formato hex
   const sigBytes = Uint8Array.from(
     signature.match(/.{1,2}/g)?.map((byte) => parseInt(byte, 16)) ?? []
   );
