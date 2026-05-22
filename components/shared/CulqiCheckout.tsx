@@ -276,7 +276,10 @@ export function CulqiCheckout({
             </Field>
 
             <Field label="Dirección" error={form.formState.errors.address?.message}>
-              <Input {...form.register('address')} placeholder="Av. Ejemplo 123" />
+              <Input
+                {...form.register('address')}
+                placeholder="Av. Los Olivos 123, Dpto 4"
+              />
             </Field>
 
             <div className="grid grid-cols-2 gap-3">
