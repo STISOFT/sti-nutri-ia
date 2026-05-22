@@ -60,7 +60,14 @@ export const subscribePaymentSchema = z.object({
     first_name: z.string().trim().min(2, 'Nombre requerido').max(80),
     last_name: z.string().trim().min(2, 'Apellidos requeridos').max(80),
     email: z.string().email('Email inválido').toLowerCase(),
-    address: z.string().trim().min(4, 'Dirección requerida').max(200),
+    // Culqi exige address de 6 a 99 caracteres ("debe ser de menos de
+    // 100 caracteres, y más de 5"). Alineamos zod para mostrar el
+    // error en el form en vez del genérico de Culqi.
+    address: z
+      .string()
+      .trim()
+      .min(6, 'Dirección muy corta (mínimo 6 caracteres, incluye calle y número)')
+      .max(99, 'Dirección muy larga (máximo 99 caracteres)'),
     address_city: z.string().trim().min(2, 'Ciudad requerida').max(80),
     country_code: z
       .string()
